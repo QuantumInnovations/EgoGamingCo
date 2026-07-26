@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en" id="top">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EgoGamingCo — Worlds worth logging into</title>
+<meta name="description" content="EgoGamingCo is an independent game studio building social, systems-rich worlds on Roblox — ObbLandZ, GO K-Fish! and The Tail of Castroid.">
+<meta name="theme-color" content="#0561E9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#070C18" media="(prefers-color-scheme: dark)">
+
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/img/favicon-16.png">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="EgoGamingCo">
+<meta property="og:title" content="EgoGamingCo — Worlds worth logging into">
+<meta property="og:description" content="An independent game studio building social, systems-rich worlds on Roblox.">
+<meta property="og:url" content="https://egogamingco.com/">
+<meta property="og:image" content="https://egogamingco.com/assets/img/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="stylesheet" href="assets/css/site.css">
+<script>
+  // Applied before first paint so a saved theme never flashes the other mode.
+  document.documentElement.classList.add('js');
+  try {
+    var t = localStorage.getItem('egc-theme');
+    if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  } catch (e) {}
+  // Failsafe: if site.js never lands, drop the class that hides reveal content.
+  setTimeout(function () {
+    if (!window.__egcReady) document.documentElement.classList.remove('js');
+  }, 2500);
+</script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <button id="theme-toggle" class="bulb" type="button" aria-label="Switch colour mode" title="Switch colour mode">
+      <svg class="bulb-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <g class="bulb-rays">
+          <path d="M12 1.6v2.2M12 20.2v2.2M4.2 12H2M22 12h-2.2M6.5 6.5 4.9 4.9M19.1 19.1l-1.6-1.6M17.5 6.5l1.6-1.6M4.9 19.1l1.6-1.6"/>
+        </g>
+        <path class="bulb-glass" d="M12 4.6a5.6 5.6 0 0 0-3.4 10.05c.5.4.8.98.86 1.6l.06.65h5l.06-.65c.06-.62.36-1.2.86-1.6A5.6 5.6 0 0 0 12 4.6Z"/>
+        <path class="bulb-base" d="M9.9 18.4h4.2M10.5 20.4h3"/>
+      </svg>
+    </button>
+
+    <a class="brand" href="#top" aria-label="EgoGamingCo home">
+      <img class="brand-lockup" src="assets/img/egogaming-lockup.png" alt="EgoGamingCo" width="2048" height="342">
+      <img class="brand-mark" src="assets/img/egogaming-mark-512.png" alt="EgoGamingCo" width="512" height="512">
+    </a>
+
+    <nav class="site-nav" aria-label="Primary">
+      <a href="#games">Games</a>
+      <a href="#studio">Studio</a>
+      <a class="nav-cta" href="https://obblandz.com" target="_blank" rel="noopener">Play now</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="hero">
+    <div class="aurora" aria-hidden="true"></div>
+    <div class="wrap hero-inner">
+      <div class="hero-copy">
+        <p class="eyebrow">Independent game studio</p>
+        <h1>Worlds worth<br><span class="grad">logging into.</span></h1>
+        <p class="lede">
+          EgoGamingCo builds social, systems-rich experiences on Roblox — places
+          with real depth under the surface, where the fun holds up on the
+          hundredth visit as well as the first.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#games">Explore our games</a>
+          <a class="btn btn-ghost" href="https://obblandz.com" target="_blank" rel="noopener">
+            Visit ObbLandZ.com
+            <svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 2h8v8M14 2 6.5 9.5M12 9.5V14H2V4h4.5"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-art" aria-hidden="true">
+        <span class="orbit orbit-1"></span>
+        <span class="orbit orbit-2"></span>
+        <img src="assets/img/egogaming-mark-1024.png" alt="" width="1024" height="1024" loading="eager" decoding="async">
+      </div>
+    </div>
+  </section>
+
+  <section id="games" class="section">
+    <div class="wrap">
+      <header class="section-head reveal">
+        <p class="eyebrow">Our games</p>
+        <h2>Three worlds, three very different rulebooks</h2>
+        <p class="section-sub">A hub-obby you can settle into, a K-Pop card hangout, and a co-op metroidvania.</p>
+      </header>
+
+      <div class="cards">
+
+        <article class="card reveal">
+          <div class="card-art art-obb">
+            <svg viewBox="0 0 320 200" role="img" aria-label="Stylised glass tower with obby platforms">
+              <defs>
+                <linearGradient id="gObb" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#0BC3F9"/><stop offset="1" stop-color="#0561E9"/>
+                </linearGradient>
+              </defs>
+              <g class="art-lines">
+                <rect x="132" y="34" width="56" height="140" rx="8"/>
+                <path d="M132 62h56M132 90h56M132 118h56M132 146h56"/>
+                <rect x="40" y="150" width="34" height="12" rx="4"/>
+                <rect x="76" y="124" width="34" height="12" rx="4"/>
+                <rect x="210" y="124" width="34" height="12" rx="4"/>
+                <rect x="246" y="150" width="34" height="12" rx="4"/>
+                <path d="M160 34V16"/>
+                <circle cx="160" cy="12" r="6"/>
+              </g>
+            </svg>
+            <span class="badge badge-live">Live</span>
+          </div>
+          <div class="card-body">
+            <h3>ObbLandZ</h3>
+            <ul class="chips">
+              <li>Obby / Tycoon</li><li>Roblox</li><li>20 players</li>
+            </ul>
+            <p>
+              A five-floor glass tower with your own turf plot bolted onto it. Four
+              difficulty arms — Unc, Noob, Buff and PSYCH — spiral out from the hub,
+              a five-level dungeon runs beneath the lobby, and there are eggs,
+              critters, find-hunts and sky races threaded through the whole thing.
+              Every inch of it is generated at runtime.
+            </p>
+            <a class="btn btn-card" href="https://obblandz.com" target="_blank" rel="noopener">
+              ObbLandZ.com
+              <svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 2h8v8M14 2 6.5 9.5M12 9.5V14H2V4h4.5"/></svg>
+            </a>
+          </div>
+        </article>
+
+        <article class="card reveal">
+          <div class="card-art art-fish">
+            <svg viewBox="0 0 320 200" role="img" aria-label="Fanned playing cards with a music note">
+              <g class="art-lines">
+                <rect x="86" y="56" width="52" height="86" rx="8" transform="rotate(-20 112 99)"/>
+                <rect x="182" y="56" width="52" height="86" rx="8" transform="rotate(20 208 99)"/>
+                <rect x="134" y="48" width="52" height="86" rx="8"/>
+                <path d="M163 72v30"/>
+                <path d="M163 72c9-3 15-3 20-1"/>
+                <circle cx="158" cy="103" r="6"/>
+                <path d="M52 158h30M238 158h30"/>
+              </g>
+            </svg>
+            <span class="badge">In development</span>
+          </div>
+          <div class="card-body">
+            <h3>GO K-Fish!</h3>
+            <ul class="chips">
+              <li>Social / Cards</li><li>Roblox</li><li>40 players</li>
+            </ul>
+            <p>
+              Go Fish, rebuilt as a K-Pop hangout. Nine tables, up to six players
+              each, played with photocards of real group members. Six themed tables
+              reroll their rules every thirty minutes, three stay traditional, and an
+              NPC will sit down with you if the room is quiet — so there is always a
+              game running.
+            </p>
+            <a class="btn btn-card" href="https://www.roblox.com/games/126178556468771" target="_blank" rel="noopener">
+              Play on Roblox
+              <svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 2h8v8M14 2 6.5 9.5M12 9.5V14H2V4h4.5"/></svg>
+            </a>
+          </div>
+        </article>
+
+        <article class="card reveal">
+          <div class="card-art art-cast">
+            <svg viewBox="0 0 320 200" role="img" aria-label="Castle battlements under a moon, framed by a room grid">
+              <g class="art-lines">
+                <path d="M40 46V32h14M280 154v14h-14"/>
+                <path d="M114 152V100l14-10 14 10V84l18-12 18 12v16l14-10 14 10v52"/>
+                <path d="M114 122h92"/>
+                <path d="M152 152v-22h16v22"/>
+                <circle cx="240" cy="74" r="15"/>
+                <path d="M240 59a15 15 0 0 0 0 30"/>
+                <path d="M64 152h192"/>
+              </g>
+            </svg>
+            <span class="badge">In development</span>
+          </div>
+          <div class="card-body">
+            <h3>The Tail of Castroid</h3>
+            <ul class="chips">
+              <li>Metroidvania</li><li>Roblox</li><li>Co-op</li>
+            </ul>
+            <p>
+              Castlevania and Metroid, played on a Zelda-style grid where the camera
+              snaps room to room. Nine themed regions, each with sub-areas and a boss
+              dungeon; rooms switch between side-on, top-down and a spinnable 2.5D
+              view. Twenty-seven themed tools double as weapons and keys, and parties
+              travel together — with NPC teammates when your friends are offline.
+            </p>
+            <a class="btn btn-card" href="https://www.roblox.com/games/72686457710961" target="_blank" rel="noopener">
+              Play on Roblox
+              <svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 2h8v8M14 2 6.5 9.5M12 9.5V14H2V4h4.5"/></svg>
+            </a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="studio" class="section section-alt">
+    <div class="wrap studio">
+      <div class="studio-copy reveal">
+        <p class="eyebrow">The studio</p>
+        <h2>Small team. Deep systems.</h2>
+        <p>
+          We are a tiny independent studio, which means we get to be stubborn about
+          the parts that matter: worlds built out of real systems rather than set
+          dressing, multiplayer that works whether you brought friends or not, and
+          controls that feel right on a phone as well as a desktop.
+        </p>
+        <p>
+          Everything we ship is designed to keep unfolding — generated geography,
+          rotating rulesets, collectibles and progression that reward the people who
+          keep coming back.
+        </p>
+      </div>
+      <ul class="facts reveal">
+        <li><strong>3</strong><span>worlds in the works</span></li>
+        <li><strong>Roblox</strong><span>our home platform</span></li>
+        <li><strong>Cross-play</strong><span>desktop, mobile &amp; gamepad</span></li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <img class="footer-mark" src="assets/img/egogaming-mark-512.png" alt="" width="512" height="512" loading="lazy" decoding="async">
+    <div class="footer-text">
+      <p class="footer-name">EgoGamingCo</p>
+      <p class="footer-meta">&copy; <span id="year">2026</span> EgoGamingCo. Roblox is a trademark of Roblox Corporation.</p>
+    </div>
+    <nav class="footer-links" aria-label="Footer">
+      <a href="https://obblandz.com" target="_blank" rel="noopener">ObbLandZ</a>
+      <a href="https://www.roblox.com/games/126178556468771" target="_blank" rel="noopener">GO K-Fish!</a>
+      <a href="https://www.roblox.com/games/72686457710961" target="_blank" rel="noopener">The Tail of Castroid</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="assets/js/site.js" defer></script>
+</body>
+</html>
