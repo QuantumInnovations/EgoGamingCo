@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>EgoGamingCo — Worlds worth replaying</title>
-<meta name="description" content="EgoGamingCo is an independent game studio building social, systems-rich worlds on Roblox — ObbLandZ, GO K-Fish! and The Tail of Castroid.">
+<meta name="description" content="EgoGamingCo is an independent game studio making original games, fan tributes to the classics, and live worlds on Roblox, for Windows, Mac, iOS, Android and the web.">
 <meta name="theme-color" content="#0561E9" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#070C18" media="(prefers-color-scheme: dark)">
 
@@ -16,7 +16,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="EgoGamingCo">
 <meta property="og:title" content="EgoGamingCo — Worlds worth replaying">
-<meta property="og:description" content="An independent game studio building social, systems-rich worlds on Roblox.">
+<meta property="og:description" content="Original games, fan tributes and live Roblox worlds, for Windows, Mac, iOS, Android and the web.">
 <meta property="og:url" content="https://egogamingco.com/">
 <meta property="og:image" content="https://egogamingco.com/assets/img/og-cover.png">
 <meta property="og:image:width" content="1200">
@@ -24,6 +24,7 @@
 <meta name="twitter:card" content="summary_large_image">
 
 <link rel="stylesheet" href="assets/css/site.css">
+<link rel="stylesheet" href="assets/css/games.css">
 <script>
   // Applied before first paint so a saved theme never flashes the other mode.
   document.documentElement.classList.add('js');
@@ -36,6 +37,89 @@
     if (!window.__egcReady) document.documentElement.classList.remove('js');
   }, 2500);
 </script>
+<style>
+.board { display: grid; gap: 14px; grid-template-columns: repeat(5, minmax(0, 1fr)); }
+@media (max-width: 1060px) { .board { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); } }
+.lane { display: flex; flex-direction: column; gap: 10px; padding: 12px; border-radius: var(--radius);
+  background: var(--bg-2); border: 1px solid var(--line); }
+.lane > header { display: flex; align-items: center; justify-content: space-between; padding: 2px 4px 6px; }
+.lane > header .n { font-size: .8rem; color: var(--text-faint); font-weight: 650; }
+.lane-note { margin: -4px 4px 4px; font-size: .8rem; color: var(--text-faint); line-height: 1.4; }
+.ticket { display: block; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden;
+  box-shadow: var(--shadow); color: inherit; transition: transform .3s var(--ease), box-shadow .3s var(--ease); }
+.ticket:hover { text-decoration: none; transform: translateY(-3px); box-shadow: var(--shadow-lift); }
+.ticket .shot { aspect-ratio: 16 / 8; }
+.ticket-body { padding: .7rem .85rem .85rem; }
+.ticket h3 { font-size: 1rem; }
+.ticket .kind { font-size: .72rem; color: var(--text-faint); font-weight: 650; }
+.ticket .kind.tribute { color: var(--tribute); }
+
+.matrix-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); }
+table.matrix { width: 100%; border-collapse: collapse; font-size: .92rem; min-width: 620px; }
+.matrix th, .matrix td { padding: .7rem .9rem; text-align: center; border-bottom: 1px solid var(--line); }
+.matrix thead th { font-size: .76rem; letter-spacing: .08em; text-transform: uppercase; color: var(--text-faint); background: var(--surface-2); }
+.matrix tbody th { text-align: left; font-weight: 650; white-space: nowrap; }
+.matrix tbody th small { display: block; font-weight: 500; color: var(--text-faint); font-size: .76rem; }
+.matrix tr.group th { background: var(--bg-2); font-size: .74rem; letter-spacing: .1em; text-transform: uppercase; color: var(--text-faint); }
+.matrix tbody tr:last-child > * { border-bottom: 0; }
+.dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; vertical-align: middle; }
+.dot.now { background: var(--brand-grad); box-shadow: 0 0 0 3px var(--chip-bg); }
+.dot.planned { border: 2px solid var(--line-strong); }
+.dot.preparing { border: 2px solid var(--st-design); }
+.dot.companion { border: 2px solid var(--st-play); }
+.matrix a { font-weight: 650; }
+.legend { margin-top: .9rem; }
+.legend .dot { margin-right: .35rem; }
+
+.strip { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+.mini { display: grid; grid-template-columns: 92px 1fr; gap: 14px; align-items: center; padding: 12px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+.mini .shot { border-radius: 12px; aspect-ratio: 1; }
+.mini h3 { font-size: 1.05rem; }
+.mini p { margin: .15rem 0 .35rem; font-size: .86rem; color: var(--text-soft); line-height: 1.45; }
+.mini a { font-size: .86rem; font-weight: 650; }
+
+#games { padding-top: 24px; padding-bottom: 0; scroll-margin-top: 68px; }
+#games .section-head { margin-bottom: 16px; }
+#games .section-head h2 { font-size: clamp(1.6rem, 2.6vw, 2.2rem); }
+#games .section-sub { margin-top: .4rem; font-size: .98rem; }
+
+.reel { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: clamp(20px, 3vw, 44px); }
+.rail { align-self: start; display: flex; flex-direction: column; gap: .1rem; font-size: .88rem; }
+.rail p { margin: .8rem 0 .2rem; font-size: .7rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--text-faint); }
+.rail p:first-child { margin-top: 0; }
+.rail a { color: var(--text-soft); padding: .18rem .7rem; border-left: 2px solid var(--line); }
+.rail a:hover { text-decoration: none; color: var(--text); }
+.rail a.on { color: var(--text); border-left-color: var(--brand-blue); font-weight: 650; }
+
+.scroller { position: relative; height: calc(100svh - 230px); min-height: 380px; overflow-y: auto;
+  container-type: size; scroll-snap-type: y proximity; border-block: 1px solid var(--line); scrollbar-gutter: stable; }
+.group-label { position: sticky; top: 0; z-index: 2; display: flex; align-items: baseline; gap: .8rem;
+  padding: .55rem 0; background: var(--bg); border-bottom: 1px solid var(--line); }
+.group-label h3 { font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; }
+.group-label span { font-size: .85rem; color: var(--text-faint); }
+.panel { min-height: calc(80cqh - 40px); padding-block: 3cqh 4cqh; scroll-snap-align: start; scroll-margin-top: 40px;
+  border-bottom: 1px solid var(--line); }
+.panel .big { font-size: clamp(1.45rem, min(3.4vw, 6.4cqh), 2.8rem); line-height: 1.05; letter-spacing: -.03em; font-weight: 750; margin: 0 0 2.4cqh; max-width: 16em; }
+.panel-grid { display: grid; gap: clamp(18px, 2.6vw, 32px); grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
+.panel .shot { border-radius: var(--radius-lg); border: 1px solid var(--line); box-shadow: var(--shadow); max-height: 48cqh; aspect-ratio: 16 / 10; }
+.panel-copy { display: flex; flex-direction: column; gap: .55rem; }
+.panel-copy h4 { margin: 0; font-size: 1.35rem; letter-spacing: -.02em; }
+.panel-copy .meta { display: flex; flex-wrap: wrap; gap: .4rem 1rem; align-items: center; font-size: .85rem; color: var(--text-faint); }
+.panel-copy p { margin: 0; color: var(--text-soft); font-size: .93rem; line-height: 1.55; }
+.panel-copy .go { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1rem; margin-top: .3rem; }
+.panel-copy .btn { padding: .6rem 1.15rem; font-size: .92rem; }
+
+@media (max-width: 900px) { .reel { grid-template-columns: 1fr; } .rail { display: none; } }
+/* On phones one game is taller than the screen, so the box lets the page do the scrolling. */
+@media (max-width: 760px) {
+  .scroller { height: auto !important; overflow: visible; container-type: normal; border: 0; }
+  .panel { min-height: 0; }
+  .panel .shot { max-height: none; }
+  .panel-grid { grid-template-columns: 1fr; }
+  .group-label { top: 68px; }
+}
+</style>
 </head>
 <body>
 
@@ -61,7 +145,7 @@
     <nav class="site-nav" aria-label="Primary">
       <a href="#games">Games</a>
       <a href="#studio">Studio</a>
-      <a class="nav-cta" href="https://obblandz.com" target="_blank" rel="noopener">Play now</a>
+      <a class="nav-cta" href="#play">Play now</a>
     </nav>
   </div>
 </header>
@@ -75,16 +159,14 @@
         <p class="eyebrow">Independent game studio</p>
         <h1>Worlds worth<br><span class="grad">replaying.</span></h1>
         <p class="lede">
-          EgoGamingCo builds social, systems-rich experiences on Roblox — places
-          with real depth under the surface, where the fun holds up on the
-          hundredth visit as well as the first.
+          EgoGamingCo makes games with real depth under the surface: original
+          ideas, fan tributes to the classics we grew up on, and live worlds on
+          Roblox. Coming to Windows, Mac, iOS and Android, and a few you can
+          play in your browser right now.
         </p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="#games">Explore our games</a>
-          <a class="btn btn-ghost" href="https://obblandz.com" target="_blank" rel="noopener">
-            Visit ObbLandZ.com
-            <svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 2h8v8M14 2 6.5 9.5M12 9.5V14H2V4h4.5"/></svg>
-          </a>
+          <a class="btn btn-ghost" href="#play">Play in your browser</a>
         </div>
       </div>
 
@@ -100,15 +182,146 @@
     <div class="wrap">
       <header class="section-head reveal">
         <p class="eyebrow">Our games</p>
-        <h2>Three worlds, three very different rulebooks</h2>
-        <p class="section-sub">A hub-obby you can settle into, a K-Pop card hangout, and a co-op metroidvania.</p>
+        <h2>Every game starts with one sentence</h2>
+        <p class="section-sub">Scroll through them one at a time, or jump straight to one from the list.</p>
       </header>
-
-      <div class="cards">
-
-        <article class="card reveal">
-          <div class="card-art art-obb">
-            <svg viewBox="0 0 320 200" role="img" aria-label="Stylised glass tower with obby platforms">
+      <div class="reel">
+        <nav class="rail" aria-label="Games"><p>Play now</p><a href="#rumor">Rumor</a><a href="#unobserved">Unobserved</a><p>Originals</p><a href="#cartographer">The Cartographer’s Lie</a><a href="#lighthouse">Lighthouse</a><a href="#pulse">Pulse</a><a href="#rumors">RumorS</a><p>Fan tributes</p><a href="#limo">Limo’s New Secrets</a><a href="#olympus">Olympus Will Fall</a><a href="#ragyr">Ragyr</a><p>On Roblox</p><a href="#obblandz">ObbLandZ</a><a href="#kfish">GO K-Fish!</a><a href="#castroid">The Tail of Castroid</a></nav>
+        <div class="scroller" tabindex="0" aria-label="Games, one at a time">
+          <div class="group-label" id="play"><h3>Play now</h3><span>Free in your browser, no download</span></div>
+          <article class="panel" id="rumor">
+            <p class="big">You are a piece of gossip. <span class="grad">Every retelling changes you.</span></p>
+            <div class="panel-grid">
+              <div class="shot"><img src="assets/img/games/rumor.webp" alt="Rumor: townsfolk in a medieval courtyard, with the scandal meter at 1" width="960" height="600" loading="lazy" decoding="async"></div>
+              <div class="panel-copy">
+                <h4>Rumor</h4>
+                <div class="meta"><span class="status st-play">Play now</span><span>Narrative puzzle</span></div>
+                
+                <p>You hop from mouth to mouth, and every teller rewrites you: the drunk makes it worse, the priest makes it a sin, the child gets the names backwards. Grow scandalous enough to get past the gate and reach the one ear that matters, without the wrong person ending up in the stocks.</p>
+                <div class="go"><ul class="plats" aria-label="Platforms"><li class="now" title="Available now">Web</li><li class="preparing" title="Preparing">Windows</li><li class="planned" title="Planned">Mac</li><li class="planned" title="Planned">iOS</li><li class="preparing" title="Preparing">Android</li></ul><a class="btn btn-primary" href="Rumor/">Play in your browser</a></div>
+              </div>
+            </div>
+          </article>
+          <article class="panel" id="unobserved">
+            <p class="big">Only what you frame exists.</p>
+            <div class="panel-grid">
+              <div class="shot"><img src="assets/img/games/unobserved.webp" alt="Unobserved: a wanderer on a bare platform inside the camera frame" width="960" height="600" loading="lazy" decoding="async"></div>
+              <div class="panel-copy">
+                <h4>Unobserved</h4>
+                <div class="meta"><span class="status st-play">Play now</span><span>Camera puzzle-platformer</span></div>
+                
+                <p>You are the camera. A wanderer walks on their own through a world that only exists inside your frame. Anything outside it stops existing, and zoom decides how solid things are: zoom out far enough and a thin wall can be walked through.</p>
+                <div class="go"><ul class="plats" aria-label="Platforms"><li class="now" title="Available now">Web</li><li class="preparing" title="Preparing">Windows</li><li class="planned" title="Planned">Mac</li><li class="planned" title="Planned">iOS</li><li class="preparing" title="Preparing">Android</li></ul><a class="btn btn-primary" href="Unobserved/">Play in your browser</a></div>
+              </div>
+            </div>
+          </article>
+          <div class="group-label" id="originals"><h3>Originals</h3><span>New ideas, each built around a single rule</span></div>
+          <article class="panel" id="cartographer">
+            <p class="big">Whatever you draw becomes true.</p>
+            <div class="panel-grid">
+              <div class="shot"><img src="assets/img/games/cartographer.webp" alt="The Cartographer&#x27;s Lie: a parchment map where a drawn river has flooded the town of Lowmere" width="960" height="600" loading="lazy" decoding="async"></div>
+              <div class="panel-copy">
+                <h4>The Cartographer’s Lie</h4>
+                <div class="meta"><span class="status st-alpha">Alpha</span><span>Drawing puzzle</span></div>
+                
+                <p>You chart unknown land from rumours and sworn testimony, then seal the map, and the land becomes exactly what you drew, mistakes and all. Water runs downhill, hills block wind, and a missing path strands the expedition. Keep the patron happy on as little ink as you can.</p>
+                <div class="go"><ul class="plats" aria-label="Platforms"><li class="planned" title="Planned">Web</li><li class="preparing" title="Preparing">Windows</li><li class="planned" title="Planned">Mac</li><li class="planned" title="Planned">iOS</li><li class="preparing" title="Preparing">Android</li></ul></div>
+              </div>
+            </div>
+          </article>
+          <article class="panel" id="lighthouse">
+            <p class="big">Whatever the light touches stands still.</p>
+            <div class="panel-grid">
+              <div class="shot"><img src="assets/img/games/lighthouse.webp" alt="Lighthouse: the beam picks out a sailing ship on a black sea" width="960" height="600" loading="lazy" decoding="async"></div>
+              <div class="panel-copy">
+                <h4>Lighthouse</h4>
+                <div class="meta"><span class="status st-proto">Prototype</span><span>Arcade strategy</span></div>
+                
+                <p>A ship only steers straight while your beam is on it, and a creature from the deep only stops while the light holds it. Every second you give one is a second of darkness for everything else. Keep the lantern lit until dawn.</p>
+                <div class="go"><ul class="plats" aria-label="Platforms"><li class="planned" title="Planned">Web</li><li class="preparing" title="Preparing">Windows</li><li class="planned" title="Planned">Mac</li><li class="planned" title="Planned">iOS</li><li class="preparing" title="Preparing">Android</li></ul></div>
+              </div>
+            </div>
+          </article>
+          <article class="panel" id="pulse">
+            <p class="big">You are the hero’s heart. <span class="grad">Keep them alive.</span></p>
+            <div class="panel-grid">
+              <div class="shot"><img src="assets/img/games/pulse.webp" alt="Pulse: a man sprints from a dog while the heart monitor reads 168 bpm" width="960" height="600" loading="lazy" decoding="async"></div>
+              <div class="panel-copy">
+                <h4>Pulse</h4>
+                <div class="meta"><span class="status st-proto">Prototype</span><span>Rhythm action</span></div>
+                
+                <p>An ordinary man runs ordinary errands while a thriller keeps brushing past him: a getaway car, a briefcase swap, a van that isn’t selling ice cream. You tap every heartbeat. Beat too slow and he stumbles, too fast and he panics, and the story changes with how you kept time.</p>
+                <div class="go"><ul class="plats" aria-label="Platforms"><li class="planned" title="Planned">Web</li><li class="preparing" title="Preparing">Windows</li><li class="planned" title="Planned">Mac</li><li class="planned" title="Planned">iOS</li><li class="preparing" title="Preparing">Android</li></ul></div>
+              </div>
+            </div>
+          </article>
+          <article class="panel" id="rumors">
+            <p class="big">Every player is a rumour. <span class="grad">First to the king wins.</span></p>
+            <div class="panel-grid">
+              <div class="shot"><svg viewBox="0 0 320 200" role="img" aria-label="Four speech bubbles converging on a crown">
+              <g class="art-lines">
+                <path d="M136 120l8-26 16 14 16-14 8 26z"/><path d="M136 128h48"/>
+                <rect x="34" y="40" width="58" height="34" rx="12"/><path d="M80 74l6 12 4-12"/>
+                <rect x="228" y="40" width="58" height="34" rx="12"/><path d="M240 74l-6 12-4-12"/>
+                <rect x="34" y="132" width="58" height="34" rx="12"/><path d="M92 146h18"/>
+                <rect x="228" y="132" width="58" height="34" rx="12"/><path d="M228 146h-18"/>
+                <path d="M98 78l28 20M222 78l-28 20" stroke-dasharray="2 9"/>
+              </g>
+            </svg></div>
+              <div class="panel-copy">
+                <h4>RumorS</h4>
+                <div class="meta"><span class="status st-design">In design</span><span>Online multiplayer</span></div>
+                
+                <p>The online follow-up to Rumor. Everybody starts as a different piece of gossip in the same medieval town, and each player has to get their own story to the king in the form they were dealt. Everyone you convince along the way is still there when your rivals pass through.</p>
+                <div class="go"><ul class="plats" aria-label="Platforms"><li class="planned" title="Planned">Web</li><li class="preparing" title="Preparing">Windows</li><li class="planned" title="Planned">Mac</li><li class="planned" title="Planned">iOS</li><li class="preparing" title="Preparing">Android</li><li class="planned" title="Planned">Roblox</li></ul></div>
+              </div>
+            </div>
+          </article>
+          <div class="group-label" id="tributes"><h3>Fan tributes</h3><span>The NES games we grew up on, measured and rebuilt</span></div>
+          <article class="panel" id="limo">
+            <p class="big">Every secret is back where you left it.</p>
+            <div class="panel-grid">
+              <div class="shot"><img src="assets/img/games/limo.webp" alt="Limo&#x27;s New Secrets: a lantern-lit castle room built from stone blocks" width="960" height="600" loading="lazy" decoding="async"></div>
+              <div class="panel-copy">
+                <h4>Limo’s New Secrets</h4>
+                <div class="meta"><span class="status st-dev">In development</span><span>2.5D platformer</span></div>
+                <p class="tribute-of">A fan tribute to <cite>Milon’s Secret Castle</cite> (Hudson Soft, NES, 1986)</p>
+                <p>The castle is rebuilt in real 3D behind a locked side-on camera, so it parallaxes while it plays like the flat original. Movement, jumps and bubbles are matched to frame-by-frame measurements of the original game, and every block and enemy is built in code.</p>
+                <div class="go"><ul class="plats" aria-label="Platforms"><li class="preparing" title="Preparing">Windows</li><li class="planned" title="Planned">Mac</li><li class="planned" title="Planned">iOS</li><li class="preparing" title="Preparing">Android</li></ul></div>
+              </div>
+            </div>
+          </article>
+          <article class="panel" id="olympus">
+            <p class="big">The gods arm you one grudging gift at a time.</p>
+            <div class="panel-grid">
+              <div class="shot"><img src="assets/img/games/olympus.webp" alt="Olympus Will Fall: Orpheus on a cliff road in Laconia beneath Poseidon&#x27;s trident" width="960" height="600" loading="lazy" decoding="async"></div>
+              <div class="panel-copy">
+                <h4>Olympus Will Fall</h4>
+                <div class="meta"><span class="status st-dev">In development</span><span>2.5D action adventure</span></div>
+                <p class="tribute-of">A fan tribute to <cite>The Battle of Olympus</cite> (NES, 1988)</p>
+                <p>Helene is gone, and Orpheus walks from Arcadia to Tartarus to bring her back. The structure is faithful, the length is condensed, and there’s a metroidvania lean. Movement is measured from the original, and there isn’t a single texture file: every mountain, olive grove and monster is built in code.</p>
+                <div class="go"><ul class="plats" aria-label="Platforms"><li class="preparing" title="Preparing">Windows</li><li class="planned" title="Planned">Mac</li><li class="planned" title="Planned">iOS</li><li class="preparing" title="Preparing">Android</li></ul></div>
+              </div>
+            </div>
+          </article>
+          <article class="panel" id="ragyr">
+            <p class="big">The Legend of the Warrior… you know…</p>
+            <div class="panel-grid">
+              <div class="shot"><img src="assets/img/games/ragyr.webp" alt="Ragyr: the warrior at a door in the Tower of Garba" width="960" height="600" loading="lazy" decoding="async"></div>
+              <div class="panel-copy">
+                <h4>Ragyr</h4>
+                <div class="meta"><span class="status st-dev">In development</span><span>2.5D action platformer</span></div>
+                <p class="tribute-of">A fan tribute to Tecmo’s legendary 1987 NES game. You know the one.</p>
+                <p>Real 3D forests and ruins parallax behind a side-on camera, and the grappling hook, crossbow and wind pulley are tuned against the original right down to how the rope sways. The music comes in three sets: Original, a Modern re-orchestration and a new procedural score.</p>
+                <div class="go"><ul class="plats" aria-label="Platforms"><li class="preparing" title="Preparing">Windows</li><li class="planned" title="Planned">Mac</li><li class="planned" title="Planned">iOS</li><li class="preparing" title="Preparing">Android</li></ul></div>
+              </div>
+            </div>
+          </article>
+          <div class="group-label" id="on-roblox"><h3>On Roblox</h3><span>Where we started, still live</span></div>
+          <article class="panel" id="obblandz">
+            <p class="big">A five-floor glass tower with your own turf bolted on.</p>
+            <div class="panel-grid">
+              <div class="shot"><svg viewBox="0 0 320 200" role="img" aria-label="Stylised glass tower with obby platforms">
               <defs>
                 <linearGradient id="gObb" x1="0" y1="0" x2="1" y2="1">
                   <stop offset="0" stop-color="#0BC3F9"/><stop offset="1" stop-color="#0561E9"/>
@@ -124,31 +337,20 @@
                 <path d="M160 34V16"/>
                 <circle cx="160" cy="12" r="6"/>
               </g>
-            </svg>
-            <span class="badge badge-live">Live</span>
-          </div>
-          <div class="card-body">
-            <h3>ObbLandZ</h3>
-            <ul class="chips">
-              <li>Obby / Tycoon</li><li>Roblox</li><li>20 players</li>
-            </ul>
-            <p>
-              A five-floor glass tower with your own turf plot bolted onto it. Four
-              difficulty arms — Unc, Noob, Buff and PSYCH — spiral out from the hub,
-              a five-level dungeon runs beneath the lobby, and there are eggs,
-              critters, find-hunts and sky races threaded through the whole thing.
-              Every inch of it is generated at runtime.
-            </p>
-            <a class="btn btn-card" href="https://obblandz.com" target="_blank" rel="noopener">
-              ObbLandZ.com
-              <svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 2h8v8M14 2 6.5 9.5M12 9.5V14H2V4h4.5"/></svg>
-            </a>
-          </div>
-        </article>
-
-        <article class="card reveal">
-          <div class="card-art art-fish">
-            <svg viewBox="0 0 320 200" role="img" aria-label="Fanned playing cards with a music note">
+            </svg></div>
+              <div class="panel-copy">
+                <h4>ObbLandZ</h4>
+                <div class="meta"><span class="status st-play">Live</span><span>Obby / Tycoon</span></div>
+                
+                <p>Four difficulty arms (Unc, Noob, Buff and PSYCH) spiral out from the hub, a five-level dungeon runs beneath the lobby, and there are eggs, critters, find-hunts and sky races throughout. The whole world is generated at runtime.</p>
+                <div class="go"><ul class="plats" aria-label="Platforms"><li class="companion" title="Companion / live experience app">Web</li><li class="now" title="Available now">Roblox</li></ul><a class="btn btn-primary" href="https://obblandz.com" target="_blank" rel="noopener">ObbLandZ.com <svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 2h8v8M14 2 6.5 9.5M12 9.5V14H2V4h4.5"/></svg></a></div>
+              </div>
+            </div>
+          </article>
+          <article class="panel" id="kfish">
+            <p class="big">Go Fish, rebuilt as a K-Pop hangout.</p>
+            <div class="panel-grid">
+              <div class="shot"><svg viewBox="0 0 320 200" role="img" aria-label="Fanned playing cards with a music note">
               <g class="art-lines">
                 <rect x="86" y="56" width="52" height="86" rx="8" transform="rotate(-20 112 99)"/>
                 <rect x="182" y="56" width="52" height="86" rx="8" transform="rotate(20 208 99)"/>
@@ -158,31 +360,20 @@
                 <circle cx="158" cy="103" r="6"/>
                 <path d="M52 158h30M238 158h30"/>
               </g>
-            </svg>
-            <span class="badge">In development</span>
-          </div>
-          <div class="card-body">
-            <h3>GO K-Fish!</h3>
-            <ul class="chips">
-              <li>Social / Cards</li><li>Roblox</li><li>40 players</li>
-            </ul>
-            <p>
-              Go Fish, rebuilt as a K-Pop hangout. Nine tables, up to six players
-              each, played with photocards of real group members. Six themed tables
-              reroll their rules every thirty minutes, three stay traditional, and an
-              NPC will sit down with you if the room is quiet — so there is always a
-              game running.
-            </p>
-            <a class="btn btn-card" href="https://www.roblox.com/games/126178556468771" target="_blank" rel="noopener">
-              Play on Roblox
-              <svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 2h8v8M14 2 6.5 9.5M12 9.5V14H2V4h4.5"/></svg>
-            </a>
-          </div>
-        </article>
-
-        <article class="card reveal">
-          <div class="card-art art-cast">
-            <svg viewBox="0 0 320 200" role="img" aria-label="Castle battlements under a moon, framed by a room grid">
+            </svg></div>
+              <div class="panel-copy">
+                <h4>GO K-Fish!</h4>
+                <div class="meta"><span class="status st-dev">In development</span><span>Social / Cards</span></div>
+                
+                <p>Nine tables of up to six players each, playing with photocards of real group members. Six themed tables reroll their rules every thirty minutes and three stay traditional. If the room is quiet, an NPC sits down with you, so there’s always a game going.</p>
+                <div class="go"><ul class="plats" aria-label="Platforms"><li class="now" title="Available now">Roblox</li></ul><a class="btn btn-primary" href="https://www.roblox.com/games/126178556468771" target="_blank" rel="noopener">Play on Roblox <svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 2h8v8M14 2 6.5 9.5M12 9.5V14H2V4h4.5"/></svg></a></div>
+              </div>
+            </div>
+          </article>
+          <article class="panel" id="castroid">
+            <p class="big">A co-op Zeldroidvania, one screen at a time.</p>
+            <div class="panel-grid">
+              <div class="shot"><svg viewBox="0 0 320 200" role="img" aria-label="Castle battlements under a moon, framed by a room grid">
               <g class="art-lines">
                 <path d="M40 46V32h14M280 154v14h-14"/>
                 <path d="M114 152V100l14-10 14 10V84l18-12 18 12v16l14-10 14 10v52"/>
@@ -192,29 +383,218 @@
                 <path d="M240 59a15 15 0 0 0 0 30"/>
                 <path d="M64 152h192"/>
               </g>
-            </svg>
-            <span class="badge">In development</span>
-          </div>
-          <div class="card-body">
-            <h3>The Tail of Castroid</h3>
-            <ul class="chips">
-              <li>Metroidvania</li><li>Roblox</li><li>Co-op</li>
-            </ul>
-            <p>
-              A co-op Zeldroidvania: one screen at a time, on a grid where the
-              camera snaps from room to room. Nine themed regions, each with sub-areas
-              and a boss dungeon; rooms switch between side-on, top-down and a
-              spinnable 2.5D view. Twenty-seven themed tools double as weapons and
-              keys, and parties travel together — with NPC teammates when your
-              friends are offline.
-            </p>
-            <a class="btn btn-card" href="https://www.roblox.com/games/72686457710961" target="_blank" rel="noopener">
-              Play on Roblox
-              <svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 2h8v8M14 2 6.5 9.5M12 9.5V14H2V4h4.5"/></svg>
-            </a>
-          </div>
-        </article>
+            </svg></div>
+              <div class="panel-copy">
+                <h4>The Tail of Castroid</h4>
+                <div class="meta"><span class="status st-dev">In development</span><span>Co-op metroidvania</span></div>
+                
+                <p>The camera snaps from room to room, and rooms switch between side-on, top-down and a spinnable 2.5D view. Twenty-seven themed tools work as both weapons and keys, and parties travel together, with NPC teammates filling in when your friends are offline.</p>
+                <div class="go"><ul class="plats" aria-label="Platforms"><li class="now" title="Available now">Roblox</li></ul><a class="btn btn-primary" href="https://www.roblox.com/games/72686457710961" target="_blank" rel="noopener">Play on Roblox <svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 2h8v8M14 2 6.5 9.5M12 9.5V14H2V4h4.5"/></svg></a></div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
 
+  <section id="where" class="section">
+    <div class="wrap">
+      <header class="section-head reveal">
+        <p class="eyebrow">Where everything is</p>
+        <h2>Twelve games, out in the open</h2>
+        <p class="section-sub">We&rsquo;re a small studio working on a lot at once. Here&rsquo;s how far along each game is.</p>
+      </header>
+      <div class="board">
+        <section class="lane reveal" aria-label="Play now">
+          <header><span class="status st-play">Play now</span><span class="n">3</span></header>
+          <p class="lane-note">Playable today in a browser or on Roblox.</p>
+          <a class="ticket" href="#rumor">
+            <div class="shot"><img src="assets/img/games/rumor.webp" alt="Rumor: townsfolk in a medieval courtyard, with the scandal meter at 1" width="960" height="600" loading="lazy" decoding="async"></div>
+            <div class="ticket-body"><span class="kind original">Original</span><h3>Rumor</h3></div>
+          </a>
+          <a class="ticket" href="#unobserved">
+            <div class="shot"><img src="assets/img/games/unobserved.webp" alt="Unobserved: a wanderer on a bare platform inside the camera frame" width="960" height="600" loading="lazy" decoding="async"></div>
+            <div class="ticket-body"><span class="kind original">Original</span><h3>Unobserved</h3></div>
+          </a>
+          <a class="ticket" href="#obblandz">
+            <div class="shot"><svg viewBox="0 0 320 200" role="img" aria-label="Stylised glass tower with obby platforms">
+              <defs>
+                <linearGradient id="gObb" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#0BC3F9"/><stop offset="1" stop-color="#0561E9"/>
+                </linearGradient>
+              </defs>
+              <g class="art-lines">
+                <rect x="132" y="34" width="56" height="140" rx="8"/>
+                <path d="M132 62h56M132 90h56M132 118h56M132 146h56"/>
+                <rect x="40" y="150" width="34" height="12" rx="4"/>
+                <rect x="76" y="124" width="34" height="12" rx="4"/>
+                <rect x="210" y="124" width="34" height="12" rx="4"/>
+                <rect x="246" y="150" width="34" height="12" rx="4"/>
+                <path d="M160 34V16"/>
+                <circle cx="160" cy="12" r="6"/>
+              </g>
+            </svg></div>
+            <div class="ticket-body"><span class="kind roblox">Roblox</span><h3>ObbLandZ</h3></div>
+          </a>
+        </section>
+        <section class="lane reveal" aria-label="Alpha">
+          <header><span class="status st-alpha">Alpha</span><span class="n">1</span></header>
+          <p class="lane-note">Complete enough to play end to end.</p>
+          <a class="ticket" href="#cartographer">
+            <div class="shot"><img src="assets/img/games/cartographer.webp" alt="The Cartographer&#x27;s Lie: a parchment map where a drawn river has flooded the town of Lowmere" width="960" height="600" loading="lazy" decoding="async"></div>
+            <div class="ticket-body"><span class="kind original">Original</span><h3>The Cartographer’s Lie</h3></div>
+          </a>
+        </section>
+        <section class="lane reveal" aria-label="In development">
+          <header><span class="status st-dev">In development</span><span class="n">5</span></header>
+          <p class="lane-note">Being built and filled in.</p>
+          <a class="ticket" href="#limo">
+            <div class="shot"><img src="assets/img/games/limo.webp" alt="Limo&#x27;s New Secrets: a lantern-lit castle room built from stone blocks" width="960" height="600" loading="lazy" decoding="async"></div>
+            <div class="ticket-body"><span class="kind tribute">Fan tribute</span><h3>Limo’s New Secrets</h3></div>
+          </a>
+          <a class="ticket" href="#olympus">
+            <div class="shot"><img src="assets/img/games/olympus.webp" alt="Olympus Will Fall: Orpheus on a cliff road in Laconia beneath Poseidon&#x27;s trident" width="960" height="600" loading="lazy" decoding="async"></div>
+            <div class="ticket-body"><span class="kind tribute">Fan tribute</span><h3>Olympus Will Fall</h3></div>
+          </a>
+          <a class="ticket" href="#ragyr">
+            <div class="shot"><img src="assets/img/games/ragyr.webp" alt="Ragyr: the warrior at a door in the Tower of Garba" width="960" height="600" loading="lazy" decoding="async"></div>
+            <div class="ticket-body"><span class="kind tribute">Fan tribute</span><h3>Ragyr</h3></div>
+          </a>
+          <a class="ticket" href="#kfish">
+            <div class="shot"><svg viewBox="0 0 320 200" role="img" aria-label="Fanned playing cards with a music note">
+              <g class="art-lines">
+                <rect x="86" y="56" width="52" height="86" rx="8" transform="rotate(-20 112 99)"/>
+                <rect x="182" y="56" width="52" height="86" rx="8" transform="rotate(20 208 99)"/>
+                <rect x="134" y="48" width="52" height="86" rx="8"/>
+                <path d="M163 72v30"/>
+                <path d="M163 72c9-3 15-3 20-1"/>
+                <circle cx="158" cy="103" r="6"/>
+                <path d="M52 158h30M238 158h30"/>
+              </g>
+            </svg></div>
+            <div class="ticket-body"><span class="kind roblox">Roblox</span><h3>GO K-Fish!</h3></div>
+          </a>
+          <a class="ticket" href="#castroid">
+            <div class="shot"><svg viewBox="0 0 320 200" role="img" aria-label="Castle battlements under a moon, framed by a room grid">
+              <g class="art-lines">
+                <path d="M40 46V32h14M280 154v14h-14"/>
+                <path d="M114 152V100l14-10 14 10V84l18-12 18 12v16l14-10 14 10v52"/>
+                <path d="M114 122h92"/>
+                <path d="M152 152v-22h16v22"/>
+                <circle cx="240" cy="74" r="15"/>
+                <path d="M240 59a15 15 0 0 0 0 30"/>
+                <path d="M64 152h192"/>
+              </g>
+            </svg></div>
+            <div class="ticket-body"><span class="kind roblox">Roblox</span><h3>The Tail of Castroid</h3></div>
+          </a>
+        </section>
+        <section class="lane reveal" aria-label="Prototype">
+          <header><span class="status st-proto">Prototype</span><span class="n">2</span></header>
+          <p class="lane-note">The core idea runs. Now we find out if it&rsquo;s fun.</p>
+          <a class="ticket" href="#lighthouse">
+            <div class="shot"><img src="assets/img/games/lighthouse.webp" alt="Lighthouse: the beam picks out a sailing ship on a black sea" width="960" height="600" loading="lazy" decoding="async"></div>
+            <div class="ticket-body"><span class="kind original">Original</span><h3>Lighthouse</h3></div>
+          </a>
+          <a class="ticket" href="#pulse">
+            <div class="shot"><img src="assets/img/games/pulse.webp" alt="Pulse: a man sprints from a dog while the heart monitor reads 168 bpm" width="960" height="600" loading="lazy" decoding="async"></div>
+            <div class="ticket-body"><span class="kind original">Original</span><h3>Pulse</h3></div>
+          </a>
+        </section>
+        <section class="lane reveal" aria-label="In design">
+          <header><span class="status st-design">In design</span><span class="n">1</span></header>
+          <p class="lane-note">On paper, and waiting on its prequel.</p>
+          <a class="ticket" href="#rumors">
+            <div class="shot"><svg viewBox="0 0 320 200" role="img" aria-label="Four speech bubbles converging on a crown">
+              <g class="art-lines">
+                <path d="M136 120l8-26 16 14 16-14 8 26z"/><path d="M136 128h48"/>
+                <rect x="34" y="40" width="58" height="34" rx="12"/><path d="M80 74l6 12 4-12"/>
+                <rect x="228" y="40" width="58" height="34" rx="12"/><path d="M240 74l-6 12-4-12"/>
+                <rect x="34" y="132" width="58" height="34" rx="12"/><path d="M92 146h18"/>
+                <rect x="228" y="132" width="58" height="34" rx="12"/><path d="M228 146h-18"/>
+                <path d="M98 78l28 20M222 78l-28 20" stroke-dasharray="2 9"/>
+              </g>
+            </svg></div>
+            <div class="ticket-body"><span class="kind original">Original</span><h3>RumorS</h3></div>
+          </a>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <section id="where-to-play" class="section section-alt">
+    <div class="wrap">
+      <header class="section-head reveal">
+        <p class="eyebrow">Where to play</p>
+        <h2>Every platform, every game</h2>
+        <p class="section-sub">A filled dot means you can play it there today, so click it. A blue ring is a companion or live experience app. A purple ring means the build is being prepared, and a grey ring means it&rsquo;s planned.</p>
+      </header>
+      <div class="matrix-wrap reveal">
+        <table class="matrix">
+          <thead><tr><th scope="col"><span class="sr">Game</span></th><th scope="col">Web</th><th scope="col">Windows</th><th scope="col">Mac</th><th scope="col">iOS</th><th scope="col">Android</th><th scope="col">Roblox</th></tr></thead>
+          <tbody><tr class="group"><th colspan="7" scope="rowgroup">Originals</th></tr><tr><th scope="row">Rumor<small>Narrative puzzle</small></th><td><a href="Rumor/" ><span class="dot now" aria-hidden="true"></span><span class="sr">Play Rumor now</span></a></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="sr">Not planned</span></td></tr><tr><th scope="row">Unobserved<small>Camera puzzle-platformer</small></th><td><a href="Unobserved/" ><span class="dot now" aria-hidden="true"></span><span class="sr">Play Unobserved now</span></a></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="sr">Not planned</span></td></tr><tr><th scope="row">The Cartographer’s Lie<small>Drawing puzzle</small></th><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="sr">Not planned</span></td></tr><tr><th scope="row">Lighthouse<small>Arcade strategy</small></th><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="sr">Not planned</span></td></tr><tr><th scope="row">Pulse<small>Rhythm action</small></th><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="sr">Not planned</span></td></tr><tr><th scope="row">RumorS<small>Online multiplayer</small></th><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td></tr><tr class="group"><th colspan="7" scope="rowgroup">Fan tributes</th></tr><tr><th scope="row">Limo’s New Secrets<small>2.5D platformer</small></th><td><span class="sr">Not planned</span></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="sr">Not planned</span></td></tr><tr><th scope="row">Olympus Will Fall<small>2.5D action adventure</small></th><td><span class="sr">Not planned</span></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="sr">Not planned</span></td></tr><tr><th scope="row">Ragyr<small>2.5D action platformer</small></th><td><span class="sr">Not planned</span></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="sr">Not planned</span></td></tr><tr class="group"><th colspan="7" scope="rowgroup">Roblox</th></tr><tr><th scope="row">ObbLandZ<small>Obby / Tycoon</small></th><td><a href="https://obblandz.com" target="_blank" rel="noopener"><span class="dot companion" aria-hidden="true"></span><span class="sr">Open the ObbLandZ companion app</span></a></td><td><span class="sr">Not planned</span></td><td><span class="sr">Not planned</span></td><td><span class="sr">Not planned</span></td><td><span class="sr">Not planned</span></td><td><a href="https://obblandz.com" target="_blank" rel="noopener" ><span class="dot now" aria-hidden="true"></span><span class="sr">Play ObbLandZ now</span></a></td></tr><tr><th scope="row">GO K-Fish!<small>Social / Cards</small></th><td><span class="sr">Not planned</span></td><td><span class="sr">Not planned</span></td><td><span class="sr">Not planned</span></td><td><span class="sr">Not planned</span></td><td><span class="sr">Not planned</span></td><td><a href="https://www.roblox.com/games/126178556468771" target="_blank" rel="noopener" ><span class="dot now" aria-hidden="true"></span><span class="sr">Play GO K-Fish! now</span></a></td></tr><tr><th scope="row">The Tail of Castroid<small>Co-op metroidvania</small></th><td><span class="sr">Not planned</span></td><td><span class="sr">Not planned</span></td><td><span class="sr">Not planned</span></td><td><span class="sr">Not planned</span></td><td><span class="sr">Not planned</span></td><td><a href="https://www.roblox.com/games/72686457710961" target="_blank" rel="noopener" ><span class="dot now" aria-hidden="true"></span><span class="sr">Play The Tail of Castroid now</span></a></td></tr></tbody>
+        </table>
+      </div>
+      <p class="legend"><span><span class="dot now"></span>Available now</span><span><span class="dot companion"></span>Companion / live experience app</span><span><span class="dot preparing"></span>Preparing</span><span><span class="dot planned"></span>Planned</span></p>
+    </div>
+  </section>
+
+  <section id="roblox" class="section">
+    <div class="wrap">
+      <header class="section-head reveal">
+        <p class="eyebrow">Where we started</p>
+        <h2>Live on Roblox</h2>
+      </header>
+      <div class="strip">
+        <article class="mini reveal">
+          <div class="shot"><svg viewBox="0 0 320 200" role="img" aria-label="Stylised glass tower with obby platforms">
+              <defs>
+                <linearGradient id="gObb" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#0BC3F9"/><stop offset="1" stop-color="#0561E9"/>
+                </linearGradient>
+              </defs>
+              <g class="art-lines">
+                <rect x="132" y="34" width="56" height="140" rx="8"/>
+                <path d="M132 62h56M132 90h56M132 118h56M132 146h56"/>
+                <rect x="40" y="150" width="34" height="12" rx="4"/>
+                <rect x="76" y="124" width="34" height="12" rx="4"/>
+                <rect x="210" y="124" width="34" height="12" rx="4"/>
+                <rect x="246" y="150" width="34" height="12" rx="4"/>
+                <path d="M160 34V16"/>
+                <circle cx="160" cy="12" r="6"/>
+              </g>
+            </svg></div>
+          <div><h3>ObbLandZ</h3><p>A five-floor glass tower with your own turf bolted on.</p><a class="" href="https://obblandz.com" target="_blank" rel="noopener">ObbLandZ.com <svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 2h8v8M14 2 6.5 9.5M12 9.5V14H2V4h4.5"/></svg></a></div>
+        </article>
+        <article class="mini reveal">
+          <div class="shot"><svg viewBox="0 0 320 200" role="img" aria-label="Fanned playing cards with a music note">
+              <g class="art-lines">
+                <rect x="86" y="56" width="52" height="86" rx="8" transform="rotate(-20 112 99)"/>
+                <rect x="182" y="56" width="52" height="86" rx="8" transform="rotate(20 208 99)"/>
+                <rect x="134" y="48" width="52" height="86" rx="8"/>
+                <path d="M163 72v30"/>
+                <path d="M163 72c9-3 15-3 20-1"/>
+                <circle cx="158" cy="103" r="6"/>
+                <path d="M52 158h30M238 158h30"/>
+              </g>
+            </svg></div>
+          <div><h3>GO K-Fish!</h3><p>Go Fish, rebuilt as a K-Pop hangout.</p><a class="" href="https://www.roblox.com/games/126178556468771" target="_blank" rel="noopener">Play on Roblox <svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 2h8v8M14 2 6.5 9.5M12 9.5V14H2V4h4.5"/></svg></a></div>
+        </article>
+        <article class="mini reveal">
+          <div class="shot"><svg viewBox="0 0 320 200" role="img" aria-label="Castle battlements under a moon, framed by a room grid">
+              <g class="art-lines">
+                <path d="M40 46V32h14M280 154v14h-14"/>
+                <path d="M114 152V100l14-10 14 10V84l18-12 18 12v16l14-10 14 10v52"/>
+                <path d="M114 122h92"/>
+                <path d="M152 152v-22h16v22"/>
+                <circle cx="240" cy="74" r="15"/>
+                <path d="M240 59a15 15 0 0 0 0 30"/>
+                <path d="M64 152h192"/>
+              </g>
+            </svg></div>
+          <div><h3>The Tail of Castroid</h3><p>A co-op Zeldroidvania, one screen at a time.</p><a class="" href="https://www.roblox.com/games/72686457710961" target="_blank" rel="noopener">Play on Roblox <svg class="ext" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 2h8v8M14 2 6.5 9.5M12 9.5V14H2V4h4.5"/></svg></a></div>
+        </article>
       </div>
     </div>
   </section>
@@ -223,58 +603,30 @@
     <div class="wrap">
       <header class="section-head reveal">
         <p class="eyebrow">What makes them different</p>
-        <h2>Three things every world does</h2>
+        <h2>Three things every game does</h2>
       </header>
-
       <ul class="pillars">
-
         <li class="pillar reveal">
           <span class="pillar-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" focusable="false">
-              <path d="M20.5 12a8.5 8.5 0 1 1-2.9-6.4"/>
-              <path d="M20.9 3.6v5h-5"/>
-              <circle cx="12" cy="12" r="2.4"/>
-            </svg>
+            <svg viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="8.6"/><circle cx="12" cy="12" r="2.4"/><path d="M12 1.6v4M12 18.4v4"/></svg>
           </span>
-          <h3>Worlds that update themselves</h3>
-          <p>
-            The map, the rules and the events keep moving on their own. Come back
-            next week and it isn't the same place you left.
-          </p>
+          <h3>One idea, all the way down</h3>
+          <p>Each original stands on a single rule, like <em>whatever you draw becomes true</em>, and every level pushes that rule somewhere new.</p>
         </li>
-
         <li class="pillar reveal">
           <span class="pillar-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" focusable="false">
-              <rect x="2.6" y="4.4" width="13" height="10" rx="2"/>
-              <path d="M2.6 7.8h13"/>
-              <rect x="13.5" y="11.6" width="7.9" height="8" rx="2.2"/>
-              <path d="M15.9 15.4h3.1M17.4 17.2h.1"/>
-            </svg>
+            <svg viewBox="0 0 24 24" focusable="false"><rect x="6.4" y="2.6" width="11.2" height="18.8" rx="2.6"/><path d="M10.6 18.2h2.8"/></svg>
           </span>
-          <h3>A companion app for every world</h3>
-          <p>
-            Players run their world from a browser, and people who have never
-            opened Roblox can still reach the ones who are in there.
-          </p>
+          <h3>Plays with whatever&rsquo;s in your hand</h3>
+          <p>The originals play with one pointer, so a finger, a mouse and a trackpad all work the same way. The tributes take a keyboard, a gamepad or touch.</p>
         </li>
-
         <li class="pillar reveal">
           <span class="pillar-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" focusable="false">
-              <circle cx="12" cy="8.2" r="3.4"/>
-              <path d="M5.6 19.4a6.6 6.6 0 0 1 12.8 0"/>
-              <path d="M3 5.2 1.4 3.6M21 5.2l1.6-1.6M12 2.4V1"/>
-            </svg>
+            <svg viewBox="0 0 24 24" focusable="false"><path d="M8 7 3 12l5 5M16 7l5 5-5 5M13.6 4.6l-3.2 14.8"/></svg>
           </span>
-          <h3>Egos</h3>
-          <p>
-            We drop into live sessions and take the controls — running events,
-            playing characters, changing the world while you're standing in it.
-            It's what the <em>Ego</em> in EgoGamingCo means.
-          </p>
+          <h3>Built in code, tuned to the frame</h3>
+          <p>We build almost everything in code instead of importing art. The tributes are measured frame by frame against the originals, then rebuilt in real 3D.</p>
         </li>
-
       </ul>
     </div>
   </section>
@@ -285,16 +637,20 @@
         <p class="eyebrow">The studio</p>
         <h2>Small team. Deep systems.</h2>
         <p>
-          We are a tiny independent studio, which means we get to be stubborn about
-          the parts that matter: worlds built out of real systems rather than set
-          dressing, multiplayer that works whether you brought friends or not, and
-          controls that feel right on a phone as well as a desktop.
+          We&rsquo;re a tiny independent studio, which means we get to be stubborn about
+          the parts that matter. Our games are built from real systems rather than set
+          dressing, the controls have to feel right on a phone as well as a desktop,
+          and when we pay tribute to a classic, we measure it before we rebuild it.
+        </p>
+        <p>
+          We started on Roblox, where we still run three live worlds and drop in as
+          <em>Egos</em> to run events from inside them. Everything new ships natively.
         </p>
       </div>
       <ul class="facts reveal">
-        <li><strong>3</strong><span>worlds in the works</span></li>
-        <li><strong>Roblox</strong><span>our home platform</span></li>
-        <li><strong>Cross-play</strong><span>desktop, mobile &amp; gamepad</span></li>
+        <li><strong>12</strong><span>games in the works</span></li>
+        <li><strong>4 + web</strong><span>Windows, Mac, iOS, Android and the browser</span></li>
+        <li><strong>Cross-play</strong><span>touch, mouse, keyboard &amp; gamepad</span></li>
       </ul>
     </div>
   </section>
@@ -309,13 +665,67 @@
       <p class="footer-meta">&copy; <span id="year">2026</span> EgoGamingCo. Roblox is a trademark of Roblox Corporation.</p>
     </div>
     <nav class="footer-links" aria-label="Footer">
-      <a href="https://obblandz.com" target="_blank" rel="noopener">ObbLandZ</a>
-      <a href="https://www.roblox.com/games/126178556468771" target="_blank" rel="noopener">GO K-Fish!</a>
-      <a href="https://www.roblox.com/games/72686457710961" target="_blank" rel="noopener">The Tail of Castroid</a>
+      <a href="#rumor">Rumor</a>
+      <a href="#unobserved">Unobserved</a>
+      <a href="#cartographer">The Cartographer’s Lie</a>
+      <a href="#lighthouse">Lighthouse</a>
+      <a href="#pulse">Pulse</a>
+      <a href="#rumors">RumorS</a>
+      <a href="#limo">Limo’s New Secrets</a>
+      <a href="#olympus">Olympus Will Fall</a>
+      <a href="#ragyr">Ragyr</a>
+      <a href="#obblandz">ObbLandZ</a>
+      <a href="#kfish">GO K-Fish!</a>
+      <a href="#castroid">The Tail of Castroid</a>
     </nav>
+    <p class="footer-note">Our fan tributes are unofficial and are not affiliated with or endorsed by the publishers of the original games. All trademarks belong to their owners.</p>
   </div>
 </footer>
 
 <script src="assets/js/site.js" defer></script>
+<script>
+(function () {
+  var section = document.getElementById('games');
+  var head = section.querySelector('.section-head');
+  var box = section.querySelector('.scroller');
+  var header = document.querySelector('.site-header');
+  var phone = window.matchMedia('(max-width: 760px)');
+
+  // Size the box so the heading sits just under the sticky header and the box ends at the fold.
+  function fit() {
+    if (phone.matches) { box.style.height = ''; return; }
+    var cs = getComputedStyle(section), hs = getComputedStyle(head);
+    var used = header.offsetHeight + parseFloat(cs.paddingTop) + head.offsetHeight + parseFloat(hs.marginBottom) + 16;
+    box.style.height = Math.max(380, window.innerHeight - used) + 'px';
+  }
+  fit();
+  window.addEventListener('resize', fit);
+
+  // Links to a game inside the box: bring the section into view, then scroll the box to the game.
+  document.addEventListener('click', function (ev) {
+    var a = ev.target.closest && ev.target.closest('a[href^="#"]');
+    if (!a || phone.matches) return;
+    var el = document.getElementById(a.getAttribute('href').slice(1));
+    if (!el || !box.contains(el)) return;
+    ev.preventDefault();
+    if (!a.closest('.rail')) section.scrollIntoView({ behavior: 'smooth' });
+    box.scrollTo({ top: el.offsetTop - (el.classList.contains('panel') ? 40 : 0), behavior: 'smooth' });
+    history.replaceState(null, '', '#' + el.id);
+  });
+
+  var links = document.querySelectorAll('.rail a');
+  if (!('IntersectionObserver' in window)) return;
+  var map = {};
+  Array.prototype.forEach.call(links, function (a) { map[a.getAttribute('href').slice(1)] = a; });
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (!en.isIntersecting) return;
+      Array.prototype.forEach.call(links, function (a) { a.classList.remove('on'); });
+      var a = map[en.target.id]; if (a) a.classList.add('on');
+    });
+  }, { root: phone.matches ? null : box, rootMargin: '-20% 0px -60% 0px' });
+  Object.keys(map).forEach(function (id) { var el = document.getElementById(id); if (el) io.observe(el); });
+})();
+</script>
 </body>
 </html>

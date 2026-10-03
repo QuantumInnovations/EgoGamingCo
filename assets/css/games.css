@@ -1,0 +1,157 @@
+/* ===========================================================================
+   EgoGamingCo — shared pieces for the multi-platform games catalogue
+   (status pills, platform tags, screenshots). Loaded after site.css.
+   =========================================================================== */
+
+:root,
+:root[data-theme="light"] {
+  --st-play: #0561e9;
+  --st-alpha: #0a8fb8;
+  --st-dev: #5b6b86;
+  --st-proto: #b26a00;
+  --st-design: #7a5bd6;
+  --plat-on: #0a1730;
+  --tribute: #a0522d;
+  --shot-ring: rgba(9, 40, 92, .14);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --st-play: #7fd8ff;
+    --st-alpha: #5fd0f0;
+    --st-dev: #a9bad6;
+    --st-proto: #ffbf5e;
+    --st-design: #b9a4ff;
+    --plat-on: #e9eef8;
+    --tribute: #f0a878;
+    --shot-ring: rgba(160, 200, 255, .16);
+  }
+}
+:root[data-theme="dark"] {
+  --st-play: #7fd8ff;
+  --st-alpha: #5fd0f0;
+  --st-dev: #a9bad6;
+  --st-proto: #ffbf5e;
+  --st-design: #b9a4ff;
+  --plat-on: #e9eef8;
+  --tribute: #f0a878;
+  --shot-ring: rgba(160, 200, 255, .16);
+}
+
+/* --- screenshots -------------------------------------------------------- */
+
+.shot {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--art-bg);
+}
+.shot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .6s var(--ease);
+}
+.shot svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* --- status pill -------------------------------------------------------- */
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  font-size: .74rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--st, var(--st-dev));
+}
+.status::before {
+  content: "";
+  width: .55rem;
+  height: .55rem;
+  border-radius: 50%;
+  background: currentColor;
+}
+.st-play   { --st: var(--st-play); }
+.st-play::before { box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 25%, transparent); }
+.st-alpha  { --st: var(--st-alpha); }
+.st-dev    { --st: var(--st-dev); }
+.st-proto  { --st: var(--st-proto); }
+.st-design { --st: var(--st-design); }
+.st-design::before { background: transparent; border: 2px solid currentColor; }
+
+/* --- platform tags ------------------------------------------------------ */
+
+.plats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.plats li {
+  padding: .16rem .55rem;
+  border-radius: 6px;
+  font-size: .74rem;
+  font-weight: 650;
+  border: 1px dashed var(--line-strong);
+  color: var(--text-faint);
+}
+.plats li.now {
+  border-style: solid;
+  border-color: transparent;
+  color: var(--plat-on);
+  background: var(--chip-bg);
+}
+.plats li.now::before { content: "▶ "; font-size: .62rem; color: var(--st-play); }
+
+/* --- misc --------------------------------------------------------------- */
+
+.hook {
+  font-style: italic;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.tribute-of {
+  font-size: .85rem;
+  color: var(--tribute);
+  font-weight: 600;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem 1.2rem;
+  font-size: .82rem;
+  color: var(--text-faint);
+}
+
+.footer-note {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: .78rem;
+  color: var(--text-faint);
+}
+
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.plats li.preparing {
+  border-style: solid;
+  border-color: var(--st-design);
+  color: var(--st-design);
+}
+
+.plats li.companion {
+  border-style: solid;
+  border-color: var(--st-play);
+  color: var(--st-play);
+}
