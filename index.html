@@ -69,6 +69,16 @@ table.matrix { width: 100%; border-collapse: collapse; font-size: .92rem; min-wi
 .dot.companion { border: 2px solid var(--st-play); }
 .matrix a { font-weight: 650; }
 .legend { margin-top: .9rem; }
+/* Phones: platform names stand on end so all seven columns fit without sideways scrolling. */
+@media (max-width: 640px) {
+  table.matrix { min-width: 0; table-layout: fixed; font-size: .84rem; }
+  .matrix th, .matrix td { padding: .5rem .1rem; }
+  .matrix thead th:not(:first-child) { width: 34px; vertical-align: bottom; padding-block: .6rem; }
+  .matrix thead th span { display: inline-block; writing-mode: vertical-rl; transform: rotate(180deg); letter-spacing: .05em; }
+  .matrix tbody th, .matrix tr.group th { padding-left: .75rem; white-space: normal; line-height: 1.25; }
+  .matrix tbody th small { display: none; }
+  .dot { width: 11px; height: 11px; }
+}
 .legend .dot { margin-right: .35rem; }
 
 .strip { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
@@ -80,45 +90,86 @@ table.matrix { width: 100%; border-collapse: collapse; font-size: .92rem; min-wi
 .mini a { font-size: .86rem; font-weight: 650; }
 
 #games { padding-top: 24px; padding-bottom: 0; scroll-margin-top: 68px; }
-#games .section-head { margin-bottom: 16px; }
+#games .section-head { margin-bottom: 18px; }
 #games .section-head h2 { font-size: clamp(1.6rem, 2.6vw, 2.2rem); }
 #games .section-sub { margin-top: .4rem; font-size: .98rem; }
 
+/* Rail on the left lists every game; the deck on the right shows one view at a time. */
 .reel { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: clamp(20px, 3vw, 44px); }
-.rail { align-self: start; display: flex; flex-direction: column; gap: .1rem; font-size: .88rem; }
+.rail { position: sticky; top: 92px; align-self: start; display: flex; flex-direction: column; gap: .1rem; font-size: .88rem;
+  scrollbar-width: none; }
+.rail::-webkit-scrollbar { display: none; }
 .rail p { margin: .8rem 0 .2rem; font-size: .7rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--text-faint); }
-.rail p:first-child { margin-top: 0; }
 .rail a { color: var(--text-soft); padding: .18rem .7rem; border-left: 2px solid var(--line); }
 .rail a:hover { text-decoration: none; color: var(--text); }
 .rail a.on { color: var(--text); border-left-color: var(--brand-blue); font-weight: 650; }
+.rail .rail-all { font-weight: 650; }
 
-.scroller { position: relative; height: calc(100svh - 230px); min-height: 380px; overflow-y: auto;
-  container-type: size; scroll-snap-type: y proximity; border-block: 1px solid var(--line); scrollbar-gutter: stable; }
-.group-label { position: sticky; top: 0; z-index: 2; display: flex; align-items: baseline; gap: .8rem;
-  padding: .55rem 0; background: var(--bg); border-bottom: 1px solid var(--line); }
-.group-label h3 { font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; }
-.group-label span { font-size: .85rem; color: var(--text-faint); }
-.panel { min-height: calc(80cqh - 40px); padding-block: 3cqh 4cqh; scroll-snap-align: start; scroll-margin-top: 40px;
-  border-bottom: 1px solid var(--line); }
-.panel .big { font-size: clamp(1.45rem, min(3.4vw, 6.4cqh), 2.8rem); line-height: 1.05; letter-spacing: -.03em; font-weight: 750; margin: 0 0 2.4cqh; max-width: 16em; }
+.deck { min-width: 0; }
+.deck-bar { display: flex; align-items: center; gap: .6rem 1rem; padding-bottom: .7rem; border-bottom: 1px solid var(--line); }
+.deck-pos { margin: 0 auto 0 0; display: flex; align-items: baseline; gap: .7rem; font-size: .88rem; color: var(--text-faint); }
+.deck-group { font-size: .74rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--text-soft); }
+.deck-nav { display: flex; gap: .5rem; }
+.deck-nav button { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; cursor: pointer;
+  border: 1px solid var(--line-strong); background: var(--surface); color: var(--text); box-shadow: var(--shadow);
+  transition: border-color .2s var(--ease), opacity .2s var(--ease); }
+.deck-nav button:hover:not(:disabled) { border-color: var(--brand-cyan); }
+.deck-nav button:disabled { opacity: .35; cursor: default; box-shadow: none; }
+.deck svg.chev { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+.track { display: flex; align-items: flex-start; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory;
+  scroll-behavior: smooth; overscroll-behavior-x: contain; scrollbar-width: none; container-type: inline-size;
+  transition: height .35s var(--ease); }
+.track::-webkit-scrollbar { display: none; }
+.slide { flex: 0 0 100%; min-width: 0; scroll-snap-align: start; scroll-snap-stop: always; scroll-margin-top: 140px; padding: 22px 4px 18px; outline: 0; }
+.slide .big { font-size: clamp(1.5rem, 3vw, 2.5rem); line-height: 1.06; letter-spacing: -.03em; font-weight: 750; margin: 0 0 20px; max-width: 18em; }
 .panel-grid { display: grid; gap: clamp(18px, 2.6vw, 32px); grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: start; }
-.panel .shot { border-radius: var(--radius-lg); border: 1px solid var(--line); box-shadow: var(--shadow); max-height: 48cqh; aspect-ratio: 16 / 10; }
+.slide .shot { border-radius: var(--radius-lg); border: 1px solid var(--line); box-shadow: var(--shadow); }
 .panel-copy { display: flex; flex-direction: column; gap: .55rem; }
-.panel-copy h4 { margin: 0; font-size: 1.35rem; letter-spacing: -.02em; }
+.panel-copy h3 { margin: 0; font-size: 1.35rem; letter-spacing: -.02em; }
 .panel-copy .meta { display: flex; flex-wrap: wrap; gap: .4rem 1rem; align-items: center; font-size: .85rem; color: var(--text-faint); }
-.panel-copy p { margin: 0; color: var(--text-soft); font-size: .93rem; line-height: 1.55; }
-.panel-copy .go { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1rem; margin-top: .3rem; }
+.panel-copy p { margin: 0; color: var(--text-soft); font-size: .95rem; line-height: 1.55; }
+.panel-copy .go { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1rem; margin-top: .4rem; }
 .panel-copy .btn { padding: .6rem 1.15rem; font-size: .92rem; }
 
-@media (max-width: 900px) { .reel { grid-template-columns: 1fr; } .rail { display: none; } }
-/* On phones one game is taller than the screen, so the box lets the page do the scrolling. */
-@media (max-width: 760px) {
-  .scroller { height: auto !important; overflow: visible; container-type: normal; border: 0; }
-  .panel { min-height: 0; }
-  .panel .shot { max-height: none; }
-  .panel-grid { grid-template-columns: 1fr; }
-  .group-label { top: 68px; }
+/* The splash is the first slide: every game as a tile. */
+.splash { display: grid; gap: 20px 14px; grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.tiles { grid-column: span var(--n); display: flex; flex-direction: column; gap: .5rem; }
+.tiles h3 { font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--text-faint); }
+.tiles ul { display: grid; gap: 14px; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); margin: 0; padding: 0; list-style: none; }
+.tile { display: flex; flex-direction: column; gap: .4rem; color: var(--text); }
+.tile:hover { text-decoration: none; }
+.tile .shot { display: block; border-radius: 12px; box-shadow: none; transition: transform .3s var(--ease), box-shadow .3s var(--ease); }
+.tile:hover .shot, .tile:focus-visible .shot { transform: translateY(-3px); box-shadow: var(--shadow-lift); }
+.tile strong { font-size: .9rem; line-height: 1.25; letter-spacing: -.01em; }
+.tile .status { font-size: .62rem; }
+
+@container (max-width: 680px) {
+  .splash { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+  .tiles { grid-column: auto; }
+  .tiles ul { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px 10px; }
+  .tiles-play ul, .tiles-originals ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tile strong { font-size: .82rem; }
+  .tile .status { font-size: .6rem; letter-spacing: .04em; }
+  .panel-grid { grid-template-columns: minmax(0, 1fr); }
+  .slide { padding-top: 16px; }
+  .slide .big { font-size: 1.45rem; margin-bottom: 14px; }
 }
+
+/* Narrow screens: the rail becomes a row of chips above the deck. */
+@media (max-width: 900px) {
+  .reel { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .rail { position: static; flex-direction: row; gap: .4rem; overflow-x: auto; padding-bottom: 2px; }
+  .rail p { display: none; }
+  .rail a { flex: none; white-space: nowrap; padding: .35rem .85rem; border: 1px solid var(--line-strong); border-radius: 999px; font-size: .84rem; }
+  .rail a.on { border-color: transparent; background: var(--brand-grad); color: #fff; }
+}
+@media (max-width: 760px) {
+  .ticket { display: grid; grid-template-columns: 104px minmax(0, 1fr); align-items: center; }
+  .ticket .shot { aspect-ratio: 16 / 10; }
+  .ticket-body { padding: .45rem .8rem; }
+}
+@media (prefers-reduced-motion: reduce) { .track { transition: none; } }
 </style>
 </head>
 <body>
@@ -183,18 +234,108 @@ table.matrix { width: 100%; border-collapse: collapse; font-size: .92rem; min-wi
       <header class="section-head reveal">
         <p class="eyebrow">Our games</p>
         <h2>Every game starts with one sentence</h2>
-        <p class="section-sub">Scroll through them one at a time, or jump straight to one from the list.</p>
+        <p class="section-sub">Pick a game from the list, or swipe and use the arrows to go through them one at a time.</p>
       </header>
       <div class="reel">
-        <nav class="rail" aria-label="Games"><p>Play now</p><a href="#rumor">Rumor</a><a href="#unobserved">Unobserved</a><p>Originals</p><a href="#cartographer">The Cartographer’s Lie</a><a href="#lighthouse">Lighthouse</a><a href="#pulse">Pulse</a><a href="#rumors">RumorS</a><p>Fan tributes</p><a href="#limo">Limo’s New Secrets</a><a href="#olympus">Olympus Will Fall</a><a href="#ragyr">Ragyr</a><p>On Roblox</p><a href="#obblandz">ObbLandZ</a><a href="#kfish">GO K-Fish!</a><a href="#castroid">The Tail of Castroid</a></nav>
-        <div class="scroller" tabindex="0" aria-label="Games, one at a time">
-          <div class="group-label" id="play"><h3>Play now</h3><span>Free in your browser, no download</span></div>
-          <article class="panel" id="rumor">
+        <nav class="rail" aria-label="Games"><a class="rail-all on" href="#all-games" aria-current="true">All games</a><p>Play now</p><a href="#rumor">Rumor</a><a href="#unobserved">Unobserved</a><p>Originals</p><a href="#cartographer">The Cartographer’s Lie</a><a href="#lighthouse">Lighthouse</a><a href="#pulse">Pulse</a><a href="#rumors">RumorS</a><p>Fan tributes</p><a href="#limo">Limo’s New Secrets</a><a href="#olympus">Olympus Will Fall</a><a href="#ragyr">Ragyr</a><p>On Roblox</p><a href="#obblandz">ObbLandZ</a><a href="#kfish">GO K-Fish!</a><a href="#castroid">The Tail of Castroid</a></nav>
+        <div class="deck" role="region" aria-roledescription="carousel" aria-label="Our games, one at a time">
+          <div class="deck-bar">
+            <p class="deck-pos" aria-live="polite"><span class="deck-group">All games</span><span class="deck-count">12 games</span></p>
+            <div class="deck-nav">
+              <button type="button" data-go="-1" aria-label="Previous" disabled><svg class="chev" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg></button>
+              <button type="button" data-go="1" aria-label="Next"><svg class="chev" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 5l7 7-7 7"/></svg></button>
+            </div>
+          </div>
+          <div class="track">
+          <div class="slide" id="all-games" tabindex="-1" role="group" aria-roledescription="slide"
+               aria-label="All games" data-group="All games" data-title="all games">
+            <div class="splash">
+              <div class="tiles tiles-play" id="play" style="--n:2">
+                <h3>Play now</h3>
+                <ul>
+                  <li><a class="tile" href="#rumor"><span class="shot"><img src="assets/img/games/rumor.webp" alt="" width="960" height="600" loading="lazy" decoding="async"></span><strong>Rumor</strong><span class="status st-play">Play now</span></a></li>
+                  <li><a class="tile" href="#unobserved"><span class="shot"><img src="assets/img/games/unobserved.webp" alt="" width="960" height="600" loading="lazy" decoding="async"></span><strong>Unobserved</strong><span class="status st-play">Play now</span></a></li>
+                </ul>
+              </div>
+              <div class="tiles tiles-originals" id="originals" style="--n:4">
+                <h3>Originals</h3>
+                <ul>
+                  <li><a class="tile" href="#cartographer"><span class="shot"><img src="assets/img/games/cartographer.webp" alt="" width="960" height="600" loading="lazy" decoding="async"></span><strong>The Cartographer’s Lie</strong><span class="status st-alpha">Alpha</span></a></li>
+                  <li><a class="tile" href="#lighthouse"><span class="shot"><img src="assets/img/games/lighthouse.webp" alt="" width="960" height="600" loading="lazy" decoding="async"></span><strong>Lighthouse</strong><span class="status st-proto">Prototype</span></a></li>
+                  <li><a class="tile" href="#pulse"><span class="shot"><img src="assets/img/games/pulse.webp" alt="" width="960" height="600" loading="lazy" decoding="async"></span><strong>Pulse</strong><span class="status st-proto">Prototype</span></a></li>
+                  <li><a class="tile" href="#rumors"><span class="shot"><svg viewBox="0 0 320 200" aria-hidden="true" focusable="false" aria-label="Four speech bubbles converging on a crown">
+              <g class="art-lines">
+                <path d="M136 120l8-26 16 14 16-14 8 26z"/><path d="M136 128h48"/>
+                <rect x="34" y="40" width="58" height="34" rx="12"/><path d="M80 74l6 12 4-12"/>
+                <rect x="228" y="40" width="58" height="34" rx="12"/><path d="M240 74l-6 12-4-12"/>
+                <rect x="34" y="132" width="58" height="34" rx="12"/><path d="M92 146h18"/>
+                <rect x="228" y="132" width="58" height="34" rx="12"/><path d="M228 146h-18"/>
+                <path d="M98 78l28 20M222 78l-28 20" stroke-dasharray="2 9"/>
+              </g>
+            </svg></span><strong>RumorS</strong><span class="status st-design">In design</span></a></li>
+                </ul>
+              </div>
+              <div class="tiles tiles-tributes" id="tributes" style="--n:3">
+                <h3>Fan tributes</h3>
+                <ul>
+                  <li><a class="tile" href="#limo"><span class="shot"><img src="assets/img/games/limo.webp" alt="" width="960" height="600" loading="lazy" decoding="async"></span><strong>Limo’s New Secrets</strong><span class="status st-dev">In development</span></a></li>
+                  <li><a class="tile" href="#olympus"><span class="shot"><img src="assets/img/games/olympus.webp" alt="" width="960" height="600" loading="lazy" decoding="async"></span><strong>Olympus Will Fall</strong><span class="status st-dev">In development</span></a></li>
+                  <li><a class="tile" href="#ragyr"><span class="shot"><img src="assets/img/games/ragyr.webp" alt="" width="960" height="600" loading="lazy" decoding="async"></span><strong>Ragyr</strong><span class="status st-dev">In development</span></a></li>
+                </ul>
+              </div>
+              <div class="tiles tiles-on-roblox" id="on-roblox" style="--n:3">
+                <h3>On Roblox</h3>
+                <ul>
+                  <li><a class="tile" href="#obblandz"><span class="shot"><svg viewBox="0 0 320 200" aria-hidden="true" focusable="false" aria-label="Stylised glass tower with obby platforms">
+              <defs>
+                <linearGradient id="gObb" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#0BC3F9"/><stop offset="1" stop-color="#0561E9"/>
+                </linearGradient>
+              </defs>
+              <g class="art-lines">
+                <rect x="132" y="34" width="56" height="140" rx="8"/>
+                <path d="M132 62h56M132 90h56M132 118h56M132 146h56"/>
+                <rect x="40" y="150" width="34" height="12" rx="4"/>
+                <rect x="76" y="124" width="34" height="12" rx="4"/>
+                <rect x="210" y="124" width="34" height="12" rx="4"/>
+                <rect x="246" y="150" width="34" height="12" rx="4"/>
+                <path d="M160 34V16"/>
+                <circle cx="160" cy="12" r="6"/>
+              </g>
+            </svg></span><strong>ObbLandZ</strong><span class="status st-play">Live</span></a></li>
+                  <li><a class="tile" href="#kfish"><span class="shot"><svg viewBox="0 0 320 200" aria-hidden="true" focusable="false" aria-label="Fanned playing cards with a music note">
+              <g class="art-lines">
+                <rect x="86" y="56" width="52" height="86" rx="8" transform="rotate(-20 112 99)"/>
+                <rect x="182" y="56" width="52" height="86" rx="8" transform="rotate(20 208 99)"/>
+                <rect x="134" y="48" width="52" height="86" rx="8"/>
+                <path d="M163 72v30"/>
+                <path d="M163 72c9-3 15-3 20-1"/>
+                <circle cx="158" cy="103" r="6"/>
+                <path d="M52 158h30M238 158h30"/>
+              </g>
+            </svg></span><strong>GO K-Fish!</strong><span class="status st-dev">In development</span></a></li>
+                  <li><a class="tile" href="#castroid"><span class="shot"><svg viewBox="0 0 320 200" aria-hidden="true" focusable="false" aria-label="Castle battlements under a moon, framed by a room grid">
+              <g class="art-lines">
+                <path d="M40 46V32h14M280 154v14h-14"/>
+                <path d="M114 152V100l14-10 14 10V84l18-12 18 12v16l14-10 14 10v52"/>
+                <path d="M114 122h92"/>
+                <path d="M152 152v-22h16v22"/>
+                <circle cx="240" cy="74" r="15"/>
+                <path d="M240 59a15 15 0 0 0 0 30"/>
+                <path d="M64 152h192"/>
+              </g>
+            </svg></span><strong>The Tail of Castroid</strong><span class="status st-dev">In development</span></a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <article class="slide" id="rumor" tabindex="-1" role="group" aria-roledescription="slide"
+                   aria-label="Rumor, 1 of 12" data-group="Play now" data-title="Rumor">
             <p class="big">You are a piece of gossip. <span class="grad">Every retelling changes you.</span></p>
             <div class="panel-grid">
               <div class="shot"><img src="assets/img/games/rumor.webp" alt="Rumor: townsfolk in a medieval courtyard, with the scandal meter at 1" width="960" height="600" loading="lazy" decoding="async"></div>
               <div class="panel-copy">
-                <h4>Rumor</h4>
+                <h3>Rumor</h3>
                 <div class="meta"><span class="status st-play">Play now</span><span>Narrative puzzle</span></div>
                 
                 <p>You hop from mouth to mouth, and every teller rewrites you: the drunk makes it worse, the priest makes it a sin, the child gets the names backwards. Grow scandalous enough to get past the gate and reach the one ear that matters, without the wrong person ending up in the stocks.</p>
@@ -202,12 +343,13 @@ table.matrix { width: 100%; border-collapse: collapse; font-size: .92rem; min-wi
               </div>
             </div>
           </article>
-          <article class="panel" id="unobserved">
+          <article class="slide" id="unobserved" tabindex="-1" role="group" aria-roledescription="slide"
+                   aria-label="Unobserved, 2 of 12" data-group="Play now" data-title="Unobserved">
             <p class="big">Only what you frame exists.</p>
             <div class="panel-grid">
               <div class="shot"><img src="assets/img/games/unobserved.webp" alt="Unobserved: a wanderer on a bare platform inside the camera frame" width="960" height="600" loading="lazy" decoding="async"></div>
               <div class="panel-copy">
-                <h4>Unobserved</h4>
+                <h3>Unobserved</h3>
                 <div class="meta"><span class="status st-play">Play now</span><span>Camera puzzle-platformer</span></div>
                 
                 <p>You are the camera. A wanderer walks on their own through a world that only exists inside your frame. Anything outside it stops existing, and zoom decides how solid things are: zoom out far enough and a thin wall can be walked through.</p>
@@ -215,13 +357,13 @@ table.matrix { width: 100%; border-collapse: collapse; font-size: .92rem; min-wi
               </div>
             </div>
           </article>
-          <div class="group-label" id="originals"><h3>Originals</h3><span>New ideas, each built around a single rule</span></div>
-          <article class="panel" id="cartographer">
+          <article class="slide" id="cartographer" tabindex="-1" role="group" aria-roledescription="slide"
+                   aria-label="The Cartographer’s Lie, 3 of 12" data-group="Original" data-title="The Cartographer’s Lie">
             <p class="big">Whatever you draw becomes true.</p>
             <div class="panel-grid">
               <div class="shot"><img src="assets/img/games/cartographer.webp" alt="The Cartographer&#x27;s Lie: a parchment map where a drawn river has flooded the town of Lowmere" width="960" height="600" loading="lazy" decoding="async"></div>
               <div class="panel-copy">
-                <h4>The Cartographer’s Lie</h4>
+                <h3>The Cartographer’s Lie</h3>
                 <div class="meta"><span class="status st-alpha">Alpha</span><span>Drawing puzzle</span></div>
                 
                 <p>You chart unknown land from rumours and sworn testimony, then seal the map, and the land becomes exactly what you drew, mistakes and all. Water runs downhill, hills block wind, and a missing path strands the expedition. Keep the patron happy on as little ink as you can.</p>
@@ -229,12 +371,13 @@ table.matrix { width: 100%; border-collapse: collapse; font-size: .92rem; min-wi
               </div>
             </div>
           </article>
-          <article class="panel" id="lighthouse">
+          <article class="slide" id="lighthouse" tabindex="-1" role="group" aria-roledescription="slide"
+                   aria-label="Lighthouse, 4 of 12" data-group="Original" data-title="Lighthouse">
             <p class="big">Whatever the light touches stands still.</p>
             <div class="panel-grid">
               <div class="shot"><img src="assets/img/games/lighthouse.webp" alt="Lighthouse: the beam picks out a sailing ship on a black sea" width="960" height="600" loading="lazy" decoding="async"></div>
               <div class="panel-copy">
-                <h4>Lighthouse</h4>
+                <h3>Lighthouse</h3>
                 <div class="meta"><span class="status st-proto">Prototype</span><span>Arcade strategy</span></div>
                 
                 <p>A ship only steers straight while your beam is on it, and a creature from the deep only stops while the light holds it. Every second you give one is a second of darkness for everything else. Keep the lantern lit until dawn.</p>
@@ -242,12 +385,13 @@ table.matrix { width: 100%; border-collapse: collapse; font-size: .92rem; min-wi
               </div>
             </div>
           </article>
-          <article class="panel" id="pulse">
+          <article class="slide" id="pulse" tabindex="-1" role="group" aria-roledescription="slide"
+                   aria-label="Pulse, 5 of 12" data-group="Original" data-title="Pulse">
             <p class="big">You are the hero’s heart. <span class="grad">Keep them alive.</span></p>
             <div class="panel-grid">
               <div class="shot"><img src="assets/img/games/pulse.webp" alt="Pulse: a man sprints from a dog while the heart monitor reads 168 bpm" width="960" height="600" loading="lazy" decoding="async"></div>
               <div class="panel-copy">
-                <h4>Pulse</h4>
+                <h3>Pulse</h3>
                 <div class="meta"><span class="status st-proto">Prototype</span><span>Rhythm action</span></div>
                 
                 <p>An ordinary man runs ordinary errands while a thriller keeps brushing past him: a getaway car, a briefcase swap, a van that isn’t selling ice cream. You tap every heartbeat. Beat too slow and he stumbles, too fast and he panics, and the story changes with how you kept time.</p>
@@ -255,7 +399,8 @@ table.matrix { width: 100%; border-collapse: collapse; font-size: .92rem; min-wi
               </div>
             </div>
           </article>
-          <article class="panel" id="rumors">
+          <article class="slide" id="rumors" tabindex="-1" role="group" aria-roledescription="slide"
+                   aria-label="RumorS, 6 of 12" data-group="Original" data-title="RumorS">
             <p class="big">Every player is a rumour. <span class="grad">First to the king wins.</span></p>
             <div class="panel-grid">
               <div class="shot"><svg viewBox="0 0 320 200" role="img" aria-label="Four speech bubbles converging on a crown">
@@ -269,7 +414,7 @@ table.matrix { width: 100%; border-collapse: collapse; font-size: .92rem; min-wi
               </g>
             </svg></div>
               <div class="panel-copy">
-                <h4>RumorS</h4>
+                <h3>RumorS</h3>
                 <div class="meta"><span class="status st-design">In design</span><span>Online multiplayer</span></div>
                 
                 <p>The online follow-up to Rumor. Everybody starts as a different piece of gossip in the same medieval town, and each player has to get their own story to the king in the form they were dealt. Everyone you convince along the way is still there when your rivals pass through.</p>
@@ -277,13 +422,13 @@ table.matrix { width: 100%; border-collapse: collapse; font-size: .92rem; min-wi
               </div>
             </div>
           </article>
-          <div class="group-label" id="tributes"><h3>Fan tributes</h3><span>The NES games we grew up on, measured and rebuilt</span></div>
-          <article class="panel" id="limo">
+          <article class="slide" id="limo" tabindex="-1" role="group" aria-roledescription="slide"
+                   aria-label="Limo’s New Secrets, 7 of 12" data-group="Fan tribute" data-title="Limo’s New Secrets">
             <p class="big">Every secret is back where you left it.</p>
             <div class="panel-grid">
               <div class="shot"><img src="assets/img/games/limo.webp" alt="Limo&#x27;s New Secrets: a lantern-lit castle room built from stone blocks" width="960" height="600" loading="lazy" decoding="async"></div>
               <div class="panel-copy">
-                <h4>Limo’s New Secrets</h4>
+                <h3>Limo’s New Secrets</h3>
                 <div class="meta"><span class="status st-dev">In development</span><span>2.5D platformer</span></div>
                 <p class="tribute-of">A fan tribute to <cite>Milon’s Secret Castle</cite> (Hudson Soft, NES, 1986)</p>
                 <p>The castle is rebuilt in real 3D behind a locked side-on camera, so it parallaxes while it plays like the flat original. Movement, jumps and bubbles are matched to frame-by-frame measurements of the original game, and every block and enemy is built in code.</p>
@@ -291,12 +436,13 @@ table.matrix { width: 100%; border-collapse: collapse; font-size: .92rem; min-wi
               </div>
             </div>
           </article>
-          <article class="panel" id="olympus">
+          <article class="slide" id="olympus" tabindex="-1" role="group" aria-roledescription="slide"
+                   aria-label="Olympus Will Fall, 8 of 12" data-group="Fan tribute" data-title="Olympus Will Fall">
             <p class="big">The gods arm you one grudging gift at a time.</p>
             <div class="panel-grid">
               <div class="shot"><img src="assets/img/games/olympus.webp" alt="Olympus Will Fall: Orpheus on a cliff road in Laconia beneath Poseidon&#x27;s trident" width="960" height="600" loading="lazy" decoding="async"></div>
               <div class="panel-copy">
-                <h4>Olympus Will Fall</h4>
+                <h3>Olympus Will Fall</h3>
                 <div class="meta"><span class="status st-dev">In development</span><span>2.5D action adventure</span></div>
                 <p class="tribute-of">A fan tribute to <cite>The Battle of Olympus</cite> (NES, 1988)</p>
                 <p>Helene is gone, and Orpheus walks from Arcadia to Tartarus to bring her back. The structure is faithful, the length is condensed, and there’s a metroidvania lean. Movement is measured from the original, and there isn’t a single texture file: every mountain, olive grove and monster is built in code.</p>
@@ -304,12 +450,13 @@ table.matrix { width: 100%; border-collapse: collapse; font-size: .92rem; min-wi
               </div>
             </div>
           </article>
-          <article class="panel" id="ragyr">
+          <article class="slide" id="ragyr" tabindex="-1" role="group" aria-roledescription="slide"
+                   aria-label="Ragyr, 9 of 12" data-group="Fan tribute" data-title="Ragyr">
             <p class="big">The Legend of the Warrior… you know…</p>
             <div class="panel-grid">
               <div class="shot"><img src="assets/img/games/ragyr.webp" alt="Ragyr: the warrior at a door in the Tower of Garba" width="960" height="600" loading="lazy" decoding="async"></div>
               <div class="panel-copy">
-                <h4>Ragyr</h4>
+                <h3>Ragyr</h3>
                 <div class="meta"><span class="status st-dev">In development</span><span>2.5D action platformer</span></div>
                 <p class="tribute-of">A fan tribute to Tecmo’s legendary 1987 NES game. You know the one.</p>
                 <p>Real 3D forests and ruins parallax behind a side-on camera, and the grappling hook, crossbow and wind pulley are tuned against the original right down to how the rope sways. The music comes in three sets: Original, a Modern re-orchestration and a new procedural score.</p>
@@ -317,8 +464,8 @@ table.matrix { width: 100%; border-collapse: collapse; font-size: .92rem; min-wi
               </div>
             </div>
           </article>
-          <div class="group-label" id="on-roblox"><h3>On Roblox</h3><span>Where we started, still live</span></div>
-          <article class="panel" id="obblandz">
+          <article class="slide" id="obblandz" tabindex="-1" role="group" aria-roledescription="slide"
+                   aria-label="ObbLandZ, 10 of 12" data-group="On Roblox" data-title="ObbLandZ">
             <p class="big">A five-floor glass tower with your own turf bolted on.</p>
             <div class="panel-grid">
               <div class="shot"><svg viewBox="0 0 320 200" role="img" aria-label="Stylised glass tower with obby platforms">
@@ -339,7 +486,7 @@ table.matrix { width: 100%; border-collapse: collapse; font-size: .92rem; min-wi
               </g>
             </svg></div>
               <div class="panel-copy">
-                <h4>ObbLandZ</h4>
+                <h3>ObbLandZ</h3>
                 <div class="meta"><span class="status st-play">Live</span><span>Obby / Tycoon</span></div>
                 
                 <p>Four difficulty arms (Unc, Noob, Buff and PSYCH) spiral out from the hub, a five-level dungeon runs beneath the lobby, and there are eggs, critters, find-hunts and sky races throughout. The whole world is generated at runtime.</p>
@@ -347,7 +494,8 @@ table.matrix { width: 100%; border-collapse: collapse; font-size: .92rem; min-wi
               </div>
             </div>
           </article>
-          <article class="panel" id="kfish">
+          <article class="slide" id="kfish" tabindex="-1" role="group" aria-roledescription="slide"
+                   aria-label="GO K-Fish!, 11 of 12" data-group="On Roblox" data-title="GO K-Fish!">
             <p class="big">Go Fish, rebuilt as a K-Pop hangout.</p>
             <div class="panel-grid">
               <div class="shot"><svg viewBox="0 0 320 200" role="img" aria-label="Fanned playing cards with a music note">
@@ -362,7 +510,7 @@ table.matrix { width: 100%; border-collapse: collapse; font-size: .92rem; min-wi
               </g>
             </svg></div>
               <div class="panel-copy">
-                <h4>GO K-Fish!</h4>
+                <h3>GO K-Fish!</h3>
                 <div class="meta"><span class="status st-dev">In development</span><span>Social / Cards</span></div>
                 
                 <p>Nine tables of up to six players each, playing with photocards of real group members. Six themed tables reroll their rules every thirty minutes and three stay traditional. If the room is quiet, an NPC sits down with you, so there’s always a game going.</p>
@@ -370,7 +518,8 @@ table.matrix { width: 100%; border-collapse: collapse; font-size: .92rem; min-wi
               </div>
             </div>
           </article>
-          <article class="panel" id="castroid">
+          <article class="slide" id="castroid" tabindex="-1" role="group" aria-roledescription="slide"
+                   aria-label="The Tail of Castroid, 12 of 12" data-group="On Roblox" data-title="The Tail of Castroid">
             <p class="big">A co-op Zeldroidvania, one screen at a time.</p>
             <div class="panel-grid">
               <div class="shot"><svg viewBox="0 0 320 200" role="img" aria-label="Castle battlements under a moon, framed by a room grid">
@@ -385,7 +534,7 @@ table.matrix { width: 100%; border-collapse: collapse; font-size: .92rem; min-wi
               </g>
             </svg></div>
               <div class="panel-copy">
-                <h4>The Tail of Castroid</h4>
+                <h3>The Tail of Castroid</h3>
                 <div class="meta"><span class="status st-dev">In development</span><span>Co-op metroidvania</span></div>
                 
                 <p>The camera snaps from room to room, and rooms switch between side-on, top-down and a spinnable 2.5D view. Twenty-seven themed tools work as both weapons and keys, and parties travel together, with NPC teammates filling in when your friends are offline.</p>
@@ -393,6 +542,7 @@ table.matrix { width: 100%; border-collapse: collapse; font-size: .92rem; min-wi
               </div>
             </div>
           </article>
+          </div>
         </div>
       </div>
     </div>
@@ -532,7 +682,7 @@ table.matrix { width: 100%; border-collapse: collapse; font-size: .92rem; min-wi
       </header>
       <div class="matrix-wrap reveal">
         <table class="matrix">
-          <thead><tr><th scope="col"><span class="sr">Game</span></th><th scope="col">Web</th><th scope="col">Windows</th><th scope="col">Mac</th><th scope="col">iOS</th><th scope="col">Android</th><th scope="col">Roblox</th></tr></thead>
+          <thead><tr><th scope="col"><span class="sr">Game</span></th><th scope="col"><span>Web</span></th><th scope="col"><span>Windows</span></th><th scope="col"><span>Mac</span></th><th scope="col"><span>iOS</span></th><th scope="col"><span>Android</span></th><th scope="col"><span>Roblox</span></th></tr></thead>
           <tbody><tr class="group"><th colspan="7" scope="rowgroup">Originals</th></tr><tr><th scope="row">Rumor<small>Narrative puzzle</small></th><td><a href="Rumor/" ><span class="dot now" aria-hidden="true"></span><span class="sr">Play Rumor now</span></a></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="sr">Not planned</span></td></tr><tr><th scope="row">Unobserved<small>Camera puzzle-platformer</small></th><td><a href="Unobserved/" ><span class="dot now" aria-hidden="true"></span><span class="sr">Play Unobserved now</span></a></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="sr">Not planned</span></td></tr><tr><th scope="row">The Cartographer’s Lie<small>Drawing puzzle</small></th><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="sr">Not planned</span></td></tr><tr><th scope="row">Lighthouse<small>Arcade strategy</small></th><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="sr">Not planned</span></td></tr><tr><th scope="row">Pulse<small>Rhythm action</small></th><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="sr">Not planned</span></td></tr><tr><th scope="row">RumorS<small>Online multiplayer</small></th><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td></tr><tr class="group"><th colspan="7" scope="rowgroup">Fan tributes</th></tr><tr><th scope="row">Limo’s New Secrets<small>2.5D platformer</small></th><td><span class="sr">Not planned</span></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="sr">Not planned</span></td></tr><tr><th scope="row">Olympus Will Fall<small>2.5D action adventure</small></th><td><span class="sr">Not planned</span></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="sr">Not planned</span></td></tr><tr><th scope="row">Ragyr<small>2.5D action platformer</small></th><td><span class="sr">Not planned</span></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot planned" aria-hidden="true"></span><span class="sr">Planned</span></td><td><span class="dot preparing" aria-hidden="true"></span><span class="sr">Preparing</span></td><td><span class="sr">Not planned</span></td></tr><tr class="group"><th colspan="7" scope="rowgroup">Roblox</th></tr><tr><th scope="row">ObbLandZ<small>Obby / Tycoon</small></th><td><a href="https://obblandz.com" target="_blank" rel="noopener"><span class="dot companion" aria-hidden="true"></span><span class="sr">Open the ObbLandZ companion app</span></a></td><td><span class="sr">Not planned</span></td><td><span class="sr">Not planned</span></td><td><span class="sr">Not planned</span></td><td><span class="sr">Not planned</span></td><td><a href="https://obblandz.com" target="_blank" rel="noopener" ><span class="dot now" aria-hidden="true"></span><span class="sr">Play ObbLandZ now</span></a></td></tr><tr><th scope="row">GO K-Fish!<small>Social / Cards</small></th><td><span class="sr">Not planned</span></td><td><span class="sr">Not planned</span></td><td><span class="sr">Not planned</span></td><td><span class="sr">Not planned</span></td><td><span class="sr">Not planned</span></td><td><a href="https://www.roblox.com/games/126178556468771" target="_blank" rel="noopener" ><span class="dot now" aria-hidden="true"></span><span class="sr">Play GO K-Fish! now</span></a></td></tr><tr><th scope="row">The Tail of Castroid<small>Co-op metroidvania</small></th><td><span class="sr">Not planned</span></td><td><span class="sr">Not planned</span></td><td><span class="sr">Not planned</span></td><td><span class="sr">Not planned</span></td><td><span class="sr">Not planned</span></td><td><a href="https://www.roblox.com/games/72686457710961" target="_blank" rel="noopener" ><span class="dot now" aria-hidden="true"></span><span class="sr">Play The Tail of Castroid now</span></a></td></tr></tbody>
         </table>
       </div>
@@ -686,45 +836,110 @@ table.matrix { width: 100%; border-collapse: collapse; font-size: .92rem; min-wi
 <script>
 (function () {
   var section = document.getElementById('games');
-  var head = section.querySelector('.section-head');
-  var box = section.querySelector('.scroller');
+  var rail = section.querySelector('.rail');
+  var deck = section.querySelector('.deck');
+  var track = deck.querySelector('.track');
+  var slides = Array.prototype.slice.call(track.children);
+  var links = Array.prototype.slice.call(rail.querySelectorAll('a'));
+  var prev = deck.querySelector('[data-go="-1"]');
+  var next = deck.querySelector('[data-go="1"]');
+  var group = deck.querySelector('.deck-group');
+  var count = deck.querySelector('.deck-count');
   var header = document.querySelector('.site-header');
-  var phone = window.matchMedia('(max-width: 760px)');
+  var still = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var games = slides.length - 1;
+  var index = 0;
 
-  // Size the box so the heading sits just under the sticky header and the box ends at the fold.
-  function fit() {
-    if (phone.matches) { box.style.height = ''; return; }
-    var cs = getComputedStyle(section), hs = getComputedStyle(head);
-    var used = header.offsetHeight + parseFloat(cs.paddingTop) + head.offsetHeight + parseFloat(hs.marginBottom) + 16;
-    box.style.height = Math.max(380, window.innerHeight - used) + 'px';
+  // The box takes the height of the current view. While sliding it only grows, so nothing is cut off
+  // mid-swipe; once the slide settles it shrinks to fit.
+  var settle = 0;
+  function fitHeight() { track.style.height = slides[index].offsetHeight + 'px'; }
+  function growTo(i) { track.style.height = Math.max(track.offsetHeight, slides[i].offsetHeight) + 'px'; }
+
+  function sync(i, write) {
+    index = i;
+    var s = slides[i];
+    group.textContent = s.getAttribute('data-group');
+    count.textContent = i === 0 ? games + ' games' : i + ' / ' + games;
+    prev.disabled = i === 0;
+    next.disabled = i === slides.length - 1;
+    prev.title = i > 0 ? 'Back to ' + slides[i - 1].getAttribute('data-title') : '';
+    next.title = i < slides.length - 1 ? 'Next: ' + slides[i + 1].getAttribute('data-title') : '';
+    links.forEach(function (a) {
+      var on = a.getAttribute('href') === '#' + s.id;
+      a.classList.toggle('on', on);
+      if (on) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
+      // On narrow screens the rail is a sideways row; keep the current chip in view.
+      if (on && rail.scrollWidth > rail.clientWidth)
+        rail.scrollTo({ left: a.offsetLeft - rail.offsetLeft - 16, behavior: still.matches ? 'auto' : 'smooth' });
+    });
+    growTo(i);
+    clearTimeout(settle);
+    settle = setTimeout(fitHeight, 400);
+    if (write) history.replaceState(null, '', i === 0 ? '#games' : '#' + s.id);
   }
-  fit();
-  window.addEventListener('resize', fit);
 
-  // Links to a game inside the box: bring the section into view, then scroll the box to the game.
-  document.addEventListener('click', function (ev) {
-    var a = ev.target.closest && ev.target.closest('a[href^="#"]');
-    if (!a || phone.matches) return;
-    var el = document.getElementById(a.getAttribute('href').slice(1));
-    if (!el || !box.contains(el)) return;
-    ev.preventDefault();
-    if (!a.closest('.rail')) section.scrollIntoView({ behavior: 'smooth' });
-    box.scrollTo({ top: el.offsetTop - (el.classList.contains('panel') ? 40 : 0), behavior: 'smooth' });
-    history.replaceState(null, '', '#' + el.id);
+  function go(i, smooth, quiet) {
+    i = Math.max(0, Math.min(slides.length - 1, i));
+    if (!smooth || still.matches) track.style.scrollBehavior = 'auto';
+    track.scrollLeft = i * track.clientWidth;
+    track.style.scrollBehavior = '';
+    sync(i, !quiet);
+    if (!smooth || still.matches) fitHeight();
+  }
+
+  // Put the top of the deck just under the sticky header, unless it is already in a good spot.
+  function bringIntoView() {
+    var room = header.offsetHeight + 12;
+    var top = (window.innerWidth > 900 ? deck : rail).getBoundingClientRect().top;
+    if (top < room || top > window.innerHeight * 0.35)
+      window.scrollTo({ top: window.pageYOffset + top - room, behavior: still.matches ? 'auto' : 'smooth' });
+  }
+
+  var raf = 0;
+  track.addEventListener('scroll', function () {
+    if (raf) return;
+    raf = requestAnimationFrame(function () {
+      raf = 0;
+      var i = Math.round(track.scrollLeft / track.clientWidth);
+      if (i !== index) sync(i, true);
+      clearTimeout(settle);
+      settle = setTimeout(fitHeight, 150);
+    });
+  });
+  window.addEventListener('resize', function () { go(index, false); });
+  if ('ResizeObserver' in window) {
+    var ro = new ResizeObserver(function () { fitHeight(); });
+    slides.forEach(function (s) { ro.observe(s); });
+  }
+
+  prev.addEventListener('click', function () { go(index - 1, true); });
+  next.addEventListener('click', function () { go(index + 1, true); });
+  deck.addEventListener('keydown', function (ev) {
+    if (ev.altKey || ev.ctrlKey || ev.metaKey) return;
+    if (ev.key === 'ArrowLeft') { ev.preventDefault(); go(index - 1, true); }
+    else if (ev.key === 'ArrowRight') { ev.preventDefault(); go(index + 1, true); }
   });
 
-  var links = document.querySelectorAll('.rail a');
-  if (!('IntersectionObserver' in window)) return;
-  var map = {};
-  Array.prototype.forEach.call(links, function (a) { map[a.getAttribute('href').slice(1)] = a; });
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (en) {
-      if (!en.isIntersecting) return;
-      Array.prototype.forEach.call(links, function (a) { a.classList.remove('on'); });
-      var a = map[en.target.id]; if (a) a.classList.add('on');
-    });
-  }, { root: phone.matches ? null : box, rootMargin: '-20% 0px -60% 0px' });
-  Object.keys(map).forEach(function (id) { var el = document.getElementById(id); if (el) io.observe(el); });
+  // Any link to something inside the deck (rail, tiles, board, footer, "Play now") turns the deck to it.
+  document.addEventListener('click', function (ev) {
+    var a = ev.target.closest && ev.target.closest('a[href^="#"]');
+    if (!a) return;
+    var el = document.getElementById(a.getAttribute('href').slice(1));
+    var slide = el && track.contains(el) && el.closest('.slide');
+    if (!slide) return;
+    ev.preventDefault();
+    var i = slides.indexOf(slide);
+    go(i, true);
+    if (rail.contains(a)) return;
+    bringIntoView();
+    if (i > 0) slide.focus({ preventScroll: true });
+  });
+
+  var target = location.hash && document.getElementById(location.hash.slice(1));
+  var first = target && track.contains(target) ? slides.indexOf(target.closest('.slide')) : 0;
+  go(first, false, true);
+  if (first > 0) window.addEventListener('load', bringIntoView);
 })();
 </script>
 </body>
